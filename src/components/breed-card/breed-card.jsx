@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export class BreedCard extends React.Component {
   render(){
@@ -14,5 +15,14 @@ export class BreedCard extends React.Component {
     )
   }
 }
+
+BreedCard.propTypes = {
+  breed: PropTypes.shape({
+    breed: PropTypes.string.isRequired,
+    eggColor: PropTypes.string.isRequired,
+    eggSize: PropTypes.string.isRequired
+  }).isRequired,
+  onBreedClick: PropTypes.func.isRequired
+};
 
 // <div key={breed._id.$oid}>{breed.breed}</div>
