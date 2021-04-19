@@ -1,0 +1,17 @@
+form {
+  max-width: 350px;
+}
+
+.form-label {
+  display:block;
+  margin: 10px;
+
+  input {
+    margin-left: 10px;
+    float: right;
+  }
+}
+
+button {
+  display: inline-block;
+}

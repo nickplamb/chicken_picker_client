@@ -5,6 +5,10 @@ import axios from 'axios';
 import { LoginView } from '../login-view/login-view';
 import { BreedCard } from '../breed-card/breed-card';
 import { BreedView } from '../breed-view/breed-view';
+import { RegistrationView } from '../registration-view/registration-view';
+
+// Styling
+import './main-view.scss';
 
 let baseUrl = 'https://chickens-api.herokuapp.com';
 
@@ -16,6 +20,7 @@ export class MainView extends React.Component {
       breeds: null,
       selectedBreed: null,
       user: null,
+      register: null,
     };
   }
 
@@ -39,10 +44,25 @@ export class MainView extends React.Component {
     });
   }
 
-  render() {
-    const { breeds, selectedBreed, user } = this.state;
+  onGoRegister() {
+    this.setState({
+      register: true
+    });
+  }
 
-    if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+  onRegistration(user) {
+    this.setState({
+      register: null
+    });
+    this.onLoggedIn(user);
+  }
+
+  render() {
+    const { breeds, selectedBreed, user, register } = this.state;
+
+    if (register) return <RegistrationView onRegistration={user => this.onRegistration(user)} />
+
+    if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} onGoRegister={() => this.onGoRegister()} />;
 
     if (!breeds) return <div className='main-view' />;
 

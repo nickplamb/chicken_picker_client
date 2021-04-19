@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+// Styling
+import './registration-view.scss';
+
 export function RegistrationView(props) {
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
@@ -10,24 +13,24 @@ export function RegistrationView(props) {
     e.preventDefault();
     console.log(username, password, email, birthday);
     // Send request to server
-    props.onLoggedIn(username);
+    props.onRegistration(username);
   }
 
   return (
     <form>
-      <label>
+      <label className="form-label">
         Username:
         <input type="text" name="username" id="username" value={username} onChange={e => setUsername(e.target.value)}/>
       </label>
-      <label>
-        Email Address:
+      <label className="form-label">
+        Email:
         <input type="email" name="email" id="email" value={email} onChange={e => setEmail(e.target.value)}/>
       </label>
-      <label>
+      <label className="form-label">
         Birthday:
         <input type="birthday" name="birthday" id="birthday" value={birthday} onChange={e => setBirthday(e.target.value)}/>
       </label>
-      <label>
+      <label className="form-label">
         Password:
         <input type="password" name="password" id="password" value={password} onChange={e => setPassword(e.target.value)}/>
       </label>
