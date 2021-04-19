@@ -1,5 +1,8 @@
 import React from 'react';
 
+// Styling
+import './breed-view.scss';
+
 export class BreedView extends React.Component {
 
   render() {

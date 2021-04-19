@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Styling
+import './breed-card.scss';
+
 export class BreedCard extends React.Component {
   render(){
     const { breed, onBreedClick } = this.props;
