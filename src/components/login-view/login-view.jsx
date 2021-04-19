@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 // Styling
 import './login-view.scss';
@@ -13,6 +14,7 @@ export function LoginView(props) {
     // Send request to server for auth
     props.onLoggedIn(username);
   }
+  
   const handleRegister = (e) => {
     e.preventDefault();
     console.log('Going to Register!');
@@ -35,3 +37,8 @@ export function LoginView(props) {
     </form>
   );
 }
+
+LoginView.propTypes = {
+  onLoggedIn: PropTypes.func.isRequired,
+  onGoRegister: PropTypes.func.isRequired,
+};

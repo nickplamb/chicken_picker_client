@@ -23,7 +23,7 @@ BreedCard.propTypes = {
   breed: PropTypes.shape({
     breed: PropTypes.string.isRequired,
     eggColor: PropTypes.string.isRequired,
-    eggSize: PropTypes.string.isRequired
+    eggSize: PropTypes.string
   }).isRequired,
   onBreedClick: PropTypes.func.isRequired
 };

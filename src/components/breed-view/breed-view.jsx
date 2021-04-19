@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // Styling
 import './breed-view.scss';
@@ -26,3 +27,12 @@ export class BreedView extends React.Component {
     );
   }
 }
+
+BreedView.propTypes = {
+  breed: PropTypes.shape({
+    breed: PropTypes.string.isRequired,
+    eggColor: PropTypes.string.isRequired,
+    eggSize: PropTypes.string
+  }).isRequired,
+  onBackClick: PropTypes.func.isRequired
+};
