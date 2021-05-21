@@ -1,20 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+const Frankie = require('url:../../../assets/frankie2.jpeg');
 
 // Styling
 import './breed-card.scss';
 
 export class BreedCard extends React.Component {
+
   render(){
     const { breed, onBreedClick } = this.props;
+
     return (
-      <div className="breed-card" onClick={() => {onBreedClick(breed); }} >
-        <h3>{breed.breed}</h3>
-        <p>
-          Egg Color: {breed.eggColor}<br />
-          Egg Size: {breed.eggSize}
-        </p>
-      </div>
+      <Card md="auto">
+        <Card.Img variant="top" src={Frankie} />
+        <Card.Body>
+          <Card.Title>{breed.breed}</Card.Title>
+          <Card.Text>
+            Egg color: {breed.eggColor}
+          </Card.Text>
+          <Button onClick={() => {onBreedClick(breed); variant="link"}}>Open</Button>
+        </Card.Body>
+      </Card>
     )
   }
 }

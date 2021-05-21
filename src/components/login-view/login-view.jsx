@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 // Styling
 import './login-view.scss';
+import { Col, Row, Form, Button, Card } from 'react-bootstrap';
 
 export function LoginView(props) {
   const [ username, setUsername ] = useState('');
@@ -14,7 +15,7 @@ export function LoginView(props) {
     // Send request to server for auth
     props.onLoggedIn(username);
   }
-  
+
   const handleRegister = (e) => {
     e.preventDefault();
     console.log('Going to Register!');
@@ -23,18 +24,36 @@ export function LoginView(props) {
   }
 
   return (
-    <form>
-      <label className="form-label">
-        Username:
-        <input type="text" name="username" id="username" value={username} onChange={e => setUsername(e.target.value)}/>
-      </label>
-      <label className="form-label">
-        Password:
-        <input type="password" name="password" id="password" value={password} onChange={e => setPassword(e.target.value)}/>
-      </label>
-      <button type="submit" onClick={handleSubmit}>Submit</button>
-      <button type="button" onClick={handleRegister}>Register</button>
-    </form>
+    <Row className="justify-content-md-center">
+      <Col md={8}>
+        <Card>
+          <Card.Header as="h1">
+              Login
+          </Card.Header>
+          <Card.Body>
+            <Form className="login">
+              <Form.Group controlId="username">
+                <Form.Label className="form-label">
+                  Username:
+                  <Form.Control type="text" name="username" value={username} autoComplete="username" onChange={e => setUsername(e.target.value)}/>
+                </Form.Label>
+              </Form.Group>
+
+              <Form.Group controlId="password">
+                <Form.Label className="form-label">
+                  Password:
+                  <Form.Control type="password" name="password" value={password} autoComplete="current-password" onChange={e => setPassword(e.target.value)}/>
+                </Form.Label>
+              </Form.Group>
+
+              <Button variant="primary" type="submit" onClick={handleSubmit}>Submit</Button>
+              <Button variant="info" type="button" onClick={handleRegister}>Register</Button>
+            </Form>
+
+          </Card.Body>
+        </Card>
+      </Col>
+    </Row>
   );
 }
 
