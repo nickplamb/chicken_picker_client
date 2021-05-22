@@ -21,7 +21,7 @@ export class BreedView extends React.Component {
         </Card.Header>
         <Card.Body>
           <Card.Img variant="top" src={Frankie} alt="a photo of a chicken"/>
-          <Card.Text>
+          <Card.Text as="div">
             <p>
               <span className="label">APA Class: </span>
               <span className="value">{breed.apaClass.name}</span>

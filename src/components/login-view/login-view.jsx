@@ -1,20 +1,35 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+
 
 // Styling
 import './login-view.scss';
 import { Col, Row, Form, Button, Card } from 'react-bootstrap';
 
+const baseURL = 'https://chickens-api.herokuapp.com'
+
 export function LoginView(props) {
-  const [ username, setUsername ] = useState('');
+  const [ email, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(username, password);
+    console.log(email, password);
+    
     // Send request to server for auth
-    props.onLoggedIn(username);
-  }
+    axios.post(`${baseURL}/login`, {
+      email: email,
+      password: password,
+    })
+    .then(res => {
+      const data = res.data;
+      props.onLoggedIn(data);
+    })
+    .catch(err => {
+      console.log(`${err}: no such user`)
+    });
+  };
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -35,7 +50,7 @@ export function LoginView(props) {
               <Form.Group controlId="username">
                 <Form.Label className="form-label">
                   Username:
-                  <Form.Control type="text" name="username" value={username} autoComplete="username" onChange={e => setUsername(e.target.value)}/>
+                  <Form.Control type="text" name="username" value={email} autoComplete="username" onChange={e => setUsername(e.target.value)}/>
                 </Form.Label>
               </Form.Group>
 

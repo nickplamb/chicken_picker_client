@@ -29,10 +29,26 @@ export class MainView extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(`${baseUrl}/breeds`).then(res => {
-      this.setState({breeds:res.data})
-    }).catch(err => {
-      console.log(err);
+    let accessToken = localStorage.getItem('token');
+    if (accessToken !== null) {
+      this.setState({
+        user: localStorage.getItem('user')
+      });
+      this.getBreeds(accessToken);
+    }
+  }
+
+  getBreeds(token){
+    axios.get(`${baseUrl}/breeds`, {
+      headers: {Authorization: `Bearer ${token}`}
+    })
+    .then(res => {
+      this.setState({
+        breeds:res.data
+      });
+    })
+    .catch(err => {
+      console.log('error at getBreeds' + err);
     });
   }
 
@@ -42,9 +58,23 @@ export class MainView extends React.Component {
     });
   }
 
-  onLoggedIn(user) {
+  onLoggedIn(authData) {
+    console.log(authData);
     this.setState({
-      user: user
+      user: authData.user.email
+    });
+
+    localStorage.setItem('token', authData.token);
+    localStorage.setItem('user', authData.user.email);
+    this.getBreeds(authData.token)
+  }
+
+  onLoggedOut() {
+    console.log('attempting to log out.')
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.setState({
+      user: null
     });
   }
 
@@ -72,7 +102,7 @@ export class MainView extends React.Component {
 
     return (
       <>
-        <ChickenNavbar /> 
+        <ChickenNavbar logout={() => {this.onLoggedOut()}}/> 
         <Row className="main-view justify-content-md-center mt-1">
           { selectedBreed 
             ? (
