@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
@@ -21,3 +22,7 @@ export function ChickenNavbar({ logout }){
     </Navbar>
   )
 }
+
+ChickenNavbar.propTypes = {
+  logout: PropTypes.func.isRequired,
+};

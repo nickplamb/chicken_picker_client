@@ -20,7 +20,7 @@ const loginFieldState = {
   required: true,
 }
 
-export function LoginView(props) {
+export function LoginView({ onGoRegister, onLoggedIn }) {
   const [ loginState, setLoginState ] = useState({
     email: {
       ...loginFieldState, 
@@ -89,7 +89,7 @@ export function LoginView(props) {
       })
       .then(res => {
         const data = res.data;
-        props.onLoggedIn(data);
+        onLoggedIn(data);
       })
       .catch(err => {
         console.log(`${err}: no such user`)
@@ -106,7 +106,7 @@ export function LoginView(props) {
   const handleRegister = (e) => {
     e.preventDefault();
     console.log('Going to Register!');
-    props.onGoRegister();
+    onGoRegister();
   }
 
   return (
@@ -164,5 +164,6 @@ export function LoginView(props) {
 }
 
 LoginView.propTypes = {
-  // logout: PropTypes.func.isRequired,
+  onGoRegister: PropTypes.func.isRequired,
+  onLoggedIn: PropTypes.func.isRequired,
 };

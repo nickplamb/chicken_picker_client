@@ -20,7 +20,7 @@ export class BreedCard extends React.Component {
           <Card.Text>
             Egg color: {breed.eggColor}
           </Card.Text>
-          <Button onClick={() => {onBreedClick(breed); variant="link"}}>Open</Button>
+          <Button onClick={() => {onBreedClick(breed)}}>Open</Button>
         </Card.Body>
       </Card>
     )
@@ -35,5 +35,3 @@ BreedCard.propTypes = {
   }).isRequired,
   onBreedClick: PropTypes.func.isRequired
 };
-
-// <div key={breed._id.$oid}>{breed.breed}</div>

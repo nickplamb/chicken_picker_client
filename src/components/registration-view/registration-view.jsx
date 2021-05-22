@@ -7,7 +7,7 @@ import './registration-view.scss';
 
 
 
-export function RegistrationView(props) {
+export function RegistrationView({ onRegistration }) {
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
   const [ email, setEmail ] = useState('');
@@ -17,7 +17,7 @@ export function RegistrationView(props) {
     e.preventDefault();
     console.log(username, password, email, birthday);
     // Send request to server
-    props.onRegistration(username);
+    onRegistration(username);
   }
 
   return (
