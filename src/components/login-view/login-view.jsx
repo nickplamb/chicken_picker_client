@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
+// Custom components
+import ErrorValidationLabel from '../helperComponents/formError';
 
 // Styling
 import './login-view.scss';
@@ -9,11 +11,13 @@ import { Col, Row, Form, Button, Card } from 'react-bootstrap';
 
 const baseURL = 'https://chickens-api.herokuapp.com'
 
+// state fields that are not unique.
 const loginFieldState = {
   value: "",
   valid: true,
   typeMismatch: false,
-  errMsg: ""
+  errMsg: "",
+  required: true,
 }
 
 export function LoginView(props) {
@@ -21,14 +25,12 @@ export function LoginView(props) {
     email: {
       ...loginFieldState, 
       fieldName: 'email', 
-      required: true,
       requiredTxt: 'Email is required',
       formatErrorTxt: 'Incorrect email format',
     },
     password: {
       ...loginFieldState,
       fieldName: 'password', 
-      required: true, 
       requiredTxt: 'Password is required'
     },
     allFieldsValid: false,
@@ -38,9 +40,9 @@ export function LoginView(props) {
   reduceFormValues = formElements => {
     const arrElements = Array.prototype.slice.call(formElements); 
     const formValues = arrElements
-      .filter(elem => elem.name.length > 0)
+      .filter(elem => elem.name.length > 0) // filter out non-input elements.
       .map(x => {
-        const { typeMismatch } = x.validity;
+        const { typeMismatch } = x.validity; // .validity is part of constraint API
         const { name, type, value } = x;
         return {
           name,
@@ -70,7 +72,7 @@ export function LoginView(props) {
   checkAllFieldsValid = (formValues) => {
     return !Object.keys(formValues)
     .map(x => formValues[x])
-    .some(field => !field.valid);
+    .some(field => !field.valid); // check the .valid property for each reduced element.
   };
 
   onSubmit = e => {
@@ -79,7 +81,8 @@ export function LoginView(props) {
     const formValues = reduceFormValues(form.elements);
     const allFieldsValid = checkAllFieldsValid(formValues);
 
-    // Send request to server for auth
+    // Send request to server for auth only if all fields are valid.
+    if (allFieldsValid) {
       axios.post(`${baseURL}/login`, {
         email: formValues.email.value,
         password: formValues.password.value,
@@ -91,18 +94,14 @@ export function LoginView(props) {
       .catch(err => {
         console.log(`${err}: no such user`)
       }); 
+    }
 
     setLoginState({ ...formValues, allFieldsValid }); //we set the state based on the extracted values from Constraint Validation API
   };
 
-  const ErrorValidationLabel = ({ txtLbl, htmlFor }) => (
-    <label htmlFor={htmlFor} style={{ color: "red" }}>
-      {txtLbl}
-    </label>
-  );
-
-  const renderEmailValidationError = loginState.email.valid ? "" : <ErrorValidationLabel txtLbl={loginState.email.typeMismatch ? loginState.email.formatErrorTxt : loginState.email.requiredTxt} htmlFor="email"/>;
-  const renderPasswordValidationError = loginState.password.valid ? "" : <ErrorValidationLabel txtLbl={loginState.password.requiredTxt} htmlFor="password"/>;
+  // display error msg based on valid property in state.
+  const renderEmailValidationError = loginState.email.valid ? "" : <ErrorValidationLabel labelTxt={loginState.email.typeMismatch ? loginState.email.formatErrorTxt : loginState.email.requiredTxt} htmlFor="email"/>;
+  const renderPasswordValidationError = loginState.password.valid ? "" : <ErrorValidationLabel labelTxt={loginState.password.requiredTxt} htmlFor="password"/>;
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -131,10 +130,8 @@ export function LoginView(props) {
                 <Form.Control 
                   type="email" 
                   name="email" 
-                  // value={loginState.email.value} 
                   autoComplete="username" 
                   placeholder="Email"
-                  // onChange={e => setEmail(e.target.value)}
                   required
                   />
                   
@@ -148,17 +145,14 @@ export function LoginView(props) {
                 <Form.Control 
                   type="password" 
                   name="password" 
-                  // value={loginState.password.value} 
                   autoComplete="current-password" 
                   placeholder="Password"
-                  // onChange={e => setPassword(e.target.value)}
                   required
                 />
                 {renderPasswordValidationError}
               </Form.Group>
 
               <Button className="mr-3" variant="primary" type="submit" >Submit</Button> 
-              {/* onClick={handleSubmit} */}
               <Button variant="info" type="button" onClick={handleRegister}>Register</Button>
             </Form>
 
@@ -170,6 +164,5 @@ export function LoginView(props) {
 }
 
 LoginView.propTypes = {
-  onLoggedIn: PropTypes.func.isRequired,
-  onGoRegister: PropTypes.func.isRequired,
+  // logout: PropTypes.func.isRequired,
 };
