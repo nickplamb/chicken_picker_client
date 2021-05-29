@@ -1,12 +1,16 @@
 import React from 'react';
 import axios from 'axios';
+import {BrowserRouter as Router, Route } from 'react-router-dom';
+import { toLower } from 'lodash';
 
 // Components
 import { ChickenNavbar } from '../layout/navbar'
 import { LoginView } from '../login-view/login-view';
+import { AllBreedsView } from '../all-breeds-view/all-breeds-view'
 import { BreedCard } from '../breed-card/breed-card';
 import { BreedView } from '../breed-view/breed-view';
 import { RegistrationView } from '../registration-view/registration-view';
+import { ClassView } from '../class-view/class-view';
 
 // Bootstrap components
 import { Row, Col } from 'react-bootstrap';
@@ -59,6 +63,7 @@ export class MainView extends React.Component {
   }
 
   onLoggedIn(authData) {
+    console.log(authData)
     this.setState({
       user: authData.user.email
     });
@@ -83,42 +88,41 @@ export class MainView extends React.Component {
     });
   }
 
-  onRegistration(user) {
+  onRegistration(authData) {
+    console.log(authData)
     this.setState({
       register: null
     });
-    this.onLoggedIn(user);
+    // this.onLoggedIn(authData);
   }
 
   render() {
     const { breeds, selectedBreed, user, register } = this.state;
-
+    
+    if (!user) return (
+      <Row>
+        <Col>
+          <LoginView onLoggedIn={user => this.onLoggedIn(user)} onGoRegister={() => this.onGoRegister()} />;
+        </Col>
+      </Row>
+    )
+    if (!breeds) return <div className='main-view' />;
     if (register) return <RegistrationView onRegistration={user => this.onRegistration(user)} />
 
-    if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} onGoRegister={() => this.onGoRegister()} />;
-
-    if (!breeds) return <div className='main-view' />;
-
     return (
-      <>
-        <ChickenNavbar logout={() => {this.onLoggedOut()}}/> 
-        <Row className="main-view justify-content-md-center mt-1">
-          { selectedBreed 
-            ? (
-                <Col md={8}>
-                  <BreedView breed={selectedBreed} onBackClick={newSelectedBreed => {this.setSelectedBreed(newSelectedBreed)}} />
-                </Col>
-            )
-            : breeds.map(breed => 
-              (
-                <Col sm={10} md={6} lg={4} xl={3} className="mt-2" key={breed._id}>
-                  <BreedCard breed={breed} onBreedClick={breed => {this.setSelectedBreed(breed)}} />
-                </Col>
-              )
-            )
-          }
+      <Router>
+        <Row>
+          <Col>
+            <ChickenNavbar logout={() => {this.onLoggedOut()}}/> 
+          </Col>
         </Row>
-      </>
+        <Row className="main-view justify-content-md-center mt-1">
+          <Route exact path="/" render={() => <AllBreedsView breeds={breeds} />} />
+          <Route path="/breeds/:breedName" render={({ match, history }) => <BreedView breed={breeds.find(b => b.breed === match.params.breedName)} onBackClick={() => history.goBack()} /> } />
+          <Route path="/apaclass/:apaClass" render={({ match, history }) => <ClassView apaClass={match.params.apaClass} breeds={breeds} onBackClick={() => history.goBack()} /> } />
+        </Row>
+      </Router>
     );
   }
 }
+// <BreedView breed={selectedBreed} onBackClick={newSelectedBreed => {this.setSelectedBreed(newSelectedBreed)}} />
