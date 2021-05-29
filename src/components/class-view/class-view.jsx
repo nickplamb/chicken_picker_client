@@ -1,0 +1,68 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Button, Card, Col } from 'react-bootstrap';
+import { upperFirst, toLower } from 'lodash';
+
+// Styling
+// import './class-view.scss';
+
+import { AllBreedsView } from '../all-breeds-view/all-breeds-view';
+import { ColoredLine } from '../helperComponents/colored-line';
+const Frankie =  require('url:../../../assets/frankie2.jpeg');
+
+export function ClassView({ breeds, apaClass, onBackClick }) {
+
+  const classDescriptions = {
+    "American": "The American Class contains thirteen breeds which originated in Canada or the United States. All are heavy breeds, and most lay brown eggs; most are cold-hardy",
+    "Asiatic": "These three breeds originate in China; they are large, feather legged, and lay brown eggs.",
+    "Continental": "This group consists of eleven breeds from Belgium, France, Germany, and the Netherlands. They are mostly sprightly birds, the Faverolles being an exception.",
+    "All Other Standard Breeds": "Other breeds are grouped in this class, which has three subclasses: Game, Oriental, and Miscellaneous. The Game subclass includes the non-oriental game birds, the Oriental subclass includes mainly birds from Asia; the Cubalaya, however, is from Cuba. The Miscellaneous subclass holds the remaining breeds.",
+    "Mediterranean": "These breeds originating in Italy and Spain have white earlobes and tend to be productive layers of white eggs. In general they are flighty, and exceptional free-range birds, with both evasion and foraging skills.",
+    "English": "This class consists of five breeds from the United Kingdom and one from Australia."
+  };
+
+  const displayClass = upperFirst(apaClass)
+
+  return (
+    <>
+      <Col md={10}>
+        <Card>
+          <Card.Header>
+            <h1>
+              {displayClass}
+            </h1>
+          </Card.Header>
+          <Card.Body>
+            <Card.Img variant="top" src={Frankie} alt="a photo of a chicken"/>
+            <Card.Text as="div">
+              <p>
+                <span className="label">Class Description: </span>
+              </p>
+              <p>
+                <span className="value">{classDescriptions[apaClass]}</span>
+              </p>
+              
+            </Card.Text>
+            <Button onClick={() => onBackClick}>Back</Button>
+          </Card.Body>
+        </Card>
+      </Col>
+      <Col xs={12}>
+        <ColoredLine color="grey"/>
+      </Col>
+      <Col xs={12} mt={2}>
+        <h3>
+          Breeds in the {apaClass} class:
+        </h3>
+      </Col>
+
+      <AllBreedsView breeds={breeds.filter(breed => (toLower(breed.apaClass.name) === toLower(apaClass)))}/>
+    </>
+  );
+}
+
+ClassView.propTypes = {
+  breeds: PropTypes.array.isRequired,
+  apaClass: PropTypes.string.isRequired,
+  onBackClick: PropTypes.func.isRequired
+};
