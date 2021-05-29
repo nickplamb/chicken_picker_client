@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { Col, Row, Form, Button, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 // Custom components
 import ErrorValidationLabel from '../helperComponents/formError';
 
 // Styling
 import './login-view.scss';
-import { Col, Row, Form, Button, Card } from 'react-bootstrap';
 
 const baseURL = 'https://chickens-api.herokuapp.com';
 
@@ -20,7 +21,7 @@ const loginFieldState = {
   required: true,
 }
 
-export function LoginView({ onGoRegister, onLoggedIn }) {
+export function LoginView({ onLoggedIn }) {
   const [ loginState, setLoginState ] = useState({
     email: {
       ...loginFieldState, 
@@ -152,7 +153,9 @@ export function LoginView({ onGoRegister, onLoggedIn }) {
               </Form.Group>
 
               <Button className="mr-3" variant="primary" type="submit" >Submit</Button> 
-              <Button variant="info" type="button" onClick={handleRegister}>Register</Button>
+              <Link to={'/register'}>
+                <Button variant="info" type="button">Register</Button>
+              </Link>
             </Form>
 
           </Card.Body>

@@ -99,23 +99,19 @@ export class MainView extends React.Component {
   render() {
     const { breeds, selectedBreed, user, register } = this.state;
     
-    if (!user) return (
-      <Row>
-        <Col>
-          <LoginView onLoggedIn={user => this.onLoggedIn(user)} onGoRegister={() => this.onGoRegister()} />;
-        </Col>
-      </Row>
-    )
+    if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
     if (!breeds) return <div className='main-view' />;
-    if (register) return <RegistrationView onRegistration={user => this.onRegistration(user)} />
+    // if (register) return <RegistrationView onRegistration={user => this.onRegistration(user)} />
 
     return (
       <Router>
         <ChickenNavbar logout={() => {this.onLoggedOut()}}/> 
         <Row className="main-view justify-content-md-center mt-1">
-          <Route exact path="/" render={() => <AllBreedsView breeds={breeds} />} />
-          <Route path="/breeds/:breedName" render={({ match, history }) => <BreedView breed={breeds.find(b => b.breed === match.params.breedName)} onBackClick={() => history.goBack()} /> } />
-          <Route path="/apaclass/:apaClass" render={({ match, history }) => <ClassView apaClass={match.params.apaClass} breeds={breeds} onBackClick={() => history.goBack()} /> } />
+          <Route exact path="/login" render={<LoginView onLoggedIn={user => this.onLoggedIn(user)} />} />;
+          <Route exact path="/register" render={<RegistrationView onRegistration={user => this.onRegistration(user)} />} />;
+          <Route exact path="/" render={() => <AllBreedsView breeds={breeds} />} />;
+          <Route path="/breeds/:breedName" render={({ match, history }) => <BreedView breed={breeds.find(b => b.breed === match.params.breedName)} onBackClick={() => history.goBack()} /> } />;
+          <Route path="/apaclass/:apaClass" render={({ match, history }) => <ClassView apaClass={match.params.apaClass} breeds={breeds} onBackClick={() => history.goBack()} /> } />;
         </Row>
       </Router>
     );

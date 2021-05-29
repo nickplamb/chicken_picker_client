@@ -43,7 +43,7 @@ export function ClassView({ breeds, apaClass, onBackClick }) {
               </p>
               
             </Card.Text>
-            <Button onClick={() => onBackClick}>Back</Button>
+            <Button onClick={onBackClick}>Back</Button>
           </Card.Body>
         </Card>
       </Col>
