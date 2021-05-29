@@ -76,7 +76,7 @@ export function RegistrationView({ onRegistration }) {
       })
       .reduce((acc, currVal) => { // consolidate properties to single object with reduce.
         const { value, valid, typeMismatch, patternMismatch, tooShort, valueMissing } = currVal; // get properties from input
-        const { fieldName, requiredTxt, formatErrorTxt, minLengthErrorTxt } = registrationState[currVal.name]; //get the rest of properties inside the state object
+        const { fieldName, requiredTxt, formatErrorTxt, minLengthErrorTxt, errMsg } = registrationState[currVal.name]; //get the rest of properties inside the state object
         acc[currVal.name] = {
           value,
           valid,
@@ -87,7 +87,8 @@ export function RegistrationView({ onRegistration }) {
           fieldName,
           requiredTxt,
           formatErrorTxt,
-          minLengthErrorTxt
+          minLengthErrorTxt,
+          errMsg
         };
         return acc;
       }, {});
@@ -122,26 +123,43 @@ export function RegistrationView({ onRegistration }) {
       })
       .catch(err => {
         console.log(err.response.data) //  ADD text to setRegistrationState({})
-        err.response.data.errors.map(error => {
-          console.log(error)
-          let errorField = error.params;
-          let errorMsg = error.msg;
-          setRegistrationState({
-            ...registrationState,
-            [errorField]: {
-              ...registrationState[errorField],
-              errMsg: errorMsg,
-              valid: false
-            }
-          })
-        })
+        console.log(err)
+        // if (err.status === 409){
+        //   formValues.email.errMsg = err.response.data;
+        //   formValues.email.errMsg = false;
+        //   // setRegistrationState({
+          //   ...registrationState,
+          //   email: {
+          //     ...registrationState.email,
+          //     errMsg: err.response.data,
+          //     valid: false
+          //   }
+          // })
+        // }
       }); 
     }
+        // formValues[err.params].errMsg = err.response.data;
+        // err.response.data.errors.map(error => {
+          //   console.log(error)
+          //   let errorField = error.params;
+          //   let errorMsg = error.msg;
+          //   setRegistrationState({
+          //     ...registrationState,
+          //     [errorField]: {
+          //       ...registrationState[errorField],
+          //       errMsg: errorMsg,
+          //       valid: false
+          //     }
+          //   })
+          // }) 
 
     setRegistrationState({ ...formValues, allFieldsValid }); //we set the state based on the extracted values from Constraint Validation API
   };
 
   const validationErrorsMsg = (field) => {
+    if (registrationState[field].errMsg) {
+      console.log(registrationState[field].errMsg);
+    }
     if (registrationState[field].valueMissing) {
       return (registrationState[field].requiredTxt);
     }
