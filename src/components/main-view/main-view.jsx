@@ -111,11 +111,7 @@ export class MainView extends React.Component {
 
     return (
       <Router>
-        <Row>
-          <Col>
-            <ChickenNavbar logout={() => {this.onLoggedOut()}}/> 
-          </Col>
-        </Row>
+        <ChickenNavbar logout={() => {this.onLoggedOut()}}/> 
         <Row className="main-view justify-content-md-center mt-1">
           <Route exact path="/" render={() => <AllBreedsView breeds={breeds} />} />
           <Route path="/breeds/:breedName" render={({ match, history }) => <BreedView breed={breeds.find(b => b.breed === match.params.breedName)} onBackClick={() => history.goBack()} /> } />
