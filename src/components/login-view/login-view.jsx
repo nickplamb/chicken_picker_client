@@ -9,7 +9,7 @@ import ErrorValidationLabel from '../helperComponents/formError';
 import './login-view.scss';
 import { Col, Row, Form, Button, Card } from 'react-bootstrap';
 
-const baseURL = 'https://chickens-api.herokuapp.com'
+const baseURL = 'https://chickens-api.herokuapp.com';
 
 // state fields that are not unique.
 const loginFieldState = {
@@ -105,7 +105,6 @@ export function LoginView({ onGoRegister, onLoggedIn }) {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    console.log('Going to Register!');
     onGoRegister();
   }
 
