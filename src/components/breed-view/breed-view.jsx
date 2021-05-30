@@ -23,7 +23,7 @@ export class BreedView extends React.Component {
           </Card.Header>
           <Card.Body>
             <Card.Img variant="top" src={Frankie} alt="a photo of a chicken"/>
-            <Card.Text as="div">
+            <Card.Text as="div" className="mt-2">
               <p>
                 <span className="label">APA Class: </span>
                 <Link to={`/apaclass/${breed.apaClass.name}`}>
@@ -38,7 +38,15 @@ export class BreedView extends React.Component {
                 <span className="label">Egg Size: </span>
                 <span className="value">{breed.eggSize}</span>
               </p>
-            </Card.Text>
+              <p>
+                <span className="label">Origin: </span>
+                <span className="value">{breed.origin}</span>
+              </p>
+              <p>
+                <span className="label">Description: </span>
+                <span className="value">{breed.description}</span>
+              </p>
+              </Card.Text>
             <Button onClick={onBackClick} >Back</Button>
           </Card.Body>
         </Card>
