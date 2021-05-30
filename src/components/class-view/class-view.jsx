@@ -19,7 +19,7 @@ export function ClassView({ breeds, apaClass, onBackClick }) {
     "All Other Standard Breeds": "Other breeds are grouped in this class, which has three subclasses: Game, Oriental, and Miscellaneous. The Game subclass includes the non-oriental game birds, the Oriental subclass includes mainly birds from Asia; the Cubalaya, however, is from Cuba. The Miscellaneous subclass holds the remaining breeds.",
     "Mediterranean": "These breeds originating in Italy and Spain have white earlobes and tend to be productive layers of white eggs. In general they are flighty, and exceptional free-range birds, with both evasion and foraging skills.",
     "English": "This class consists of five breeds from the United Kingdom and one from Australia.",
-    "Not Listed": "This breed is not listed in the American Poultry Association's Standards of Perfection"
+    "Not Listed": "There are many breeds not listed in the American Poultry Association's Standards of Perfection."
   };
 
   const displayClass = upperFirst(apaClass)
@@ -35,10 +35,13 @@ export function ClassView({ breeds, apaClass, onBackClick }) {
           </Card.Header>
           <Card.Body>
             <Card.Img variant="top" src={Frankie} alt="a photo of a chicken"/>
-            <Card.Text as="div">
-              <p>
-                <span className="label">Class Description: </span>
-              </p>
+            <Card.Text as="div" className="mt-1" >
+              {
+                apaClass !== "Not Listed" && 
+                <p>
+                  <span className="label">Class Description: </span>
+                </p>
+              }
               <p>
                 <span className="value">{classDescriptions[apaClass]}</span>
               </p>
@@ -53,7 +56,11 @@ export function ClassView({ breeds, apaClass, onBackClick }) {
       </Col>
       <Col xs={12} mt={2}>
         <h3>
-          Breeds in the {apaClass} class:
+          {
+            apaClass === "Not Listed" 
+            ? "Other breeds not listed by the APA:"
+            : `Breeds in the ${apaClass} class:`
+          }
         </h3>
       </Col>
 
