@@ -18,7 +18,8 @@ export function ClassView({ breeds, apaClass, onBackClick }) {
     "Continental": "This group consists of eleven breeds from Belgium, France, Germany, and the Netherlands. They are mostly sprightly birds, the Faverolles being an exception.",
     "All Other Standard Breeds": "Other breeds are grouped in this class, which has three subclasses: Game, Oriental, and Miscellaneous. The Game subclass includes the non-oriental game birds, the Oriental subclass includes mainly birds from Asia; the Cubalaya, however, is from Cuba. The Miscellaneous subclass holds the remaining breeds.",
     "Mediterranean": "These breeds originating in Italy and Spain have white earlobes and tend to be productive layers of white eggs. In general they are flighty, and exceptional free-range birds, with both evasion and foraging skills.",
-    "English": "This class consists of five breeds from the United Kingdom and one from Australia."
+    "English": "This class consists of five breeds from the United Kingdom and one from Australia.",
+    "Not Listed": "This breed is not listed in the American Poultry Association's Standards of Perfection"
   };
 
   const displayClass = upperFirst(apaClass)
