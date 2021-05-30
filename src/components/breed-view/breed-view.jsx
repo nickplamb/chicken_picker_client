@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Col } from 'react-bootstrap';
+import { indexOf, split, truncate } from 'lodash'
 
 // Styling
 import './breed-view.scss';
@@ -10,8 +11,16 @@ const Frankie =  require('url:../../../assets/frankie2.jpeg');
 
 export class BreedView extends React.Component {
 
+
   render() {
     const { breed, onBackClick } = this.props;
+
+    const isDualPurpose =  (purposeArray) => {
+      return (purposeArray.indexOf('meat') > -1 && purposeArray.indexOf('eggs') > -1 );
+      // console.log((purposeArray.indexOf('meat') > -1 && purposeArray.indexOf('eggs') > -1 ))
+    }
+
+    const breedsPurpose = isDualPurpose(split(breed.purpose, ', ')) ? "dual-purpose" : breed.purpose;
 
     return (
       <Col md={8}>
@@ -31,6 +40,10 @@ export class BreedView extends React.Component {
                 </Link>
               </p>
               <p>
+                <span className="label">Purpose: </span>
+                <span className="value">{breedsPurpose}</span>
+              </p>
+              <p>
                 <span className="label">Egg Color: </span>
                 <span className="value">{breed.eggColor}</span>
               </p>
@@ -38,14 +51,20 @@ export class BreedView extends React.Component {
                 <span className="label">Egg Size: </span>
                 <span className="value">{breed.eggSize}</span>
               </p>
-              <p>
-                <span className="label">Origin: </span>
-                <span className="value">{breed.origin}</span>
-              </p>
-              <p>
-                <span className="label">Description: </span>
-                <span className="value">{breed.description}</span>
-              </p>
+              {
+                breed.origin &&
+                <p>
+                  <span className="label">Origin: </span>
+                  <span className="value">{breed.origin}</span>
+                </p>
+              }
+              {
+                breed.description &&
+                <p>
+                  <span className="label">Description: </span>
+                  <span className="value">{breed.description}</span>
+                </p>
+              }
               </Card.Text>
             <Button onClick={onBackClick} >Back</Button>
           </Card.Body>
@@ -72,6 +91,7 @@ BreedView.propTypes = {
   breed: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     breed: PropTypes.string.isRequired,
+    purpose: PropTypes.string.isRequired,
     eggColor: PropTypes.string.isRequired,
     eggSize: PropTypes.string
   }).isRequired,
