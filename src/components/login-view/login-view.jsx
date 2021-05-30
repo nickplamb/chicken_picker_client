@@ -110,8 +110,8 @@ export function LoginView({ onLoggedIn }) {
   }
 
   return (
-    <Row className="justify-content-md-center">
-      <Col md={8}>
+    // <Row className="justify-content-md-center">
+      <Col md={10} lg={8}>
         <Card>
           <Card.Header as="h1">
               Login
@@ -161,11 +161,11 @@ export function LoginView({ onLoggedIn }) {
           </Card.Body>
         </Card>
       </Col>
-    </Row>
+    // </Row>
   );
 }
 
 LoginView.propTypes = {
-  onGoRegister: PropTypes.func.isRequired,
+  // onGoRegister: PropTypes.func.isRequired,
   onLoggedIn: PropTypes.func.isRequired,
 };

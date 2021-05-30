@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 // Bootstrap
 import { Form, Button, Row, Col, Card } from 'react-bootstrap';
@@ -24,7 +24,7 @@ const defaultFieldState = {
   errMsg: "",
 }
 
-export function RegistrationView({ onRegistration }) {
+export function RegistrationView() {
   const [ registrationState, setRegistrationState ] = useState({
     username: {
       ...defaultFieldState,
@@ -117,13 +117,14 @@ export function RegistrationView({ onRegistration }) {
       })
       .then(res => {
         const data = res.data;
-        console.log('res data')
-        console.log(data)
-        onRegistration(data);
+        console.log('res data');
+        console.log(data);
+        window.open('/', '_self');
+        // onRegistration(data);
       })
       .catch(err => {
-        console.log(err.response.data) //  ADD text to setRegistrationState({})
-        console.log(err)
+        console.log(err.response.data); //  ADD text to setRegistrationState({})
+        console.log(err);
         // if (err.status === 409){
         //   formValues.email.errMsg = err.response.data;
         //   formValues.email.errMsg = false;
@@ -177,8 +178,8 @@ export function RegistrationView({ onRegistration }) {
   const renderPasswordValidationError = registrationState.password.valid ? "" : <ErrorValidationLabel labelTxt={validationErrorsMsg('password')} htmlFor="password"/>;;
 
   return (
-    <Row className="justify-content-md-center">
-      <Col md={8}>
+    // <Row className="justify-content-md-center">
+      <Col md={10} lg={8} >
         <Card>
           <Card.Header>
             Register
@@ -247,10 +248,9 @@ export function RegistrationView({ onRegistration }) {
           </Card.Body>
         </Card>
       </Col>
-    </Row>
+    // </Row>
   );
 }
 
-RegistrationView.propTypes = {
-  onRegistration: PropTypes.func.isRequired
-};
+// RegistrationView.propTypes = {
+// };
