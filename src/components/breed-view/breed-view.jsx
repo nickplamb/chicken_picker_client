@@ -93,7 +93,9 @@ BreedView.propTypes = {
     breed: PropTypes.string.isRequired,
     purpose: PropTypes.string.isRequired,
     eggColor: PropTypes.string.isRequired,
-    eggSize: PropTypes.string
+    eggSize: PropTypes.string,
+    origin: PropTypes.string,
+    description: PropTypes.string,
   }).isRequired,
   onBackClick: PropTypes.func.isRequired
 };
