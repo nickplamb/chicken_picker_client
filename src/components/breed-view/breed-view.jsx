@@ -13,14 +13,16 @@ export class BreedView extends React.Component {
 
 
   render() {
+    // a single breed is sent from main-view
     const { breed, onBackClick } = this.props;
 
+    const purposeArray = split(breed.purpose, ', ');
     const isDualPurpose =  (purposeArray) => {
       return (purposeArray.indexOf('meat') > -1 && purposeArray.indexOf('eggs') > -1 );
-      // console.log((purposeArray.indexOf('meat') > -1 && purposeArray.indexOf('eggs') > -1 ))
     }
 
-    const breedsPurpose = isDualPurpose(split(breed.purpose, ', ')) ? "dual-purpose" : breed.purpose;
+
+    const breedsPurpose = isDualPurpose(purposeArray) ? ["Dual-purpose"] : purposeArray;
 
     return (
       <Col md={8}>
@@ -41,7 +43,12 @@ export class BreedView extends React.Component {
               </p>
               <p>
                 <span className="label">Purpose: </span>
-                <span className="value">{breedsPurpose}</span>
+                {breedsPurpose.map((purpose, index, array) => (
+                  <Link to={`/purpose/${purpose}`}>
+                    <span className="value">{purpose}</span>
+                    {index < array.length && array.length > 1 ? ", ": ""}
+                  </Link>
+                ))}
               </p>
               <p>
                 <span className="label">Egg Color: </span>
