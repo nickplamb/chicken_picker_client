@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { Col, Image, Form, Button, Modal} from 'react-bootstrap';
 
 import './profile-view.scss';
@@ -305,3 +306,11 @@ export function ProfileView({ username, userEmail, token, userFavorites, onBackC
     </>
   )
 }
+
+ProfileView.propTypes = {
+  username: PropTypes.string.isRequired,
+  userEmail: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
+  userFavorites: PropTypes.array.isRequired,
+  onBackClick: PropTypes.func.isRequired
+};
