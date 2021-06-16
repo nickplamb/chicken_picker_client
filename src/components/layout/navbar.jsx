@@ -13,9 +13,9 @@ export function ChickenNavbar({ logout }){
           <Navbar.Collapse id="navbar-nav">
             <Nav className="ml-auto">
               <Nav.Link href="/" >Home</Nav.Link>
-              <Nav.Link href="#">Logout</Nav.Link>
+              {/* <Nav.Link href="#">Logout</Nav.Link> */}
               <NavDropdown title="Profile" id="collapsible-nav-dropdown">
-                <NavDropdown.Item href="#">Profile</NavDropdown.Item>
+                <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
                 <NavDropdown.Item href="#">Favorites</NavDropdown.Item>
                 <NavDropdown.Item href="#" onClick={()=>logout()}>Logout</NavDropdown.Item>
               </NavDropdown>
