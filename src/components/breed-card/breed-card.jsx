@@ -18,11 +18,16 @@ export class BreedCard extends React.Component {
         <Card.Img variant="top" src={Frankie} />
         <Card.Body>
           <Card.Title>{breed.breed}</Card.Title>
-          <Card.Text>
-            Egg color: {breed.eggColor}
+          <Card.Text as="div">
+            <p>
+              Egg color: {breed.eggColor}
+            </p>
+            <p>
+              Purpose: {breed.purpose}
+            </p>
           </Card.Text>
           <Link to={`/breeds/${breed.breed}`}>
-            <Button variant="link">Open</Button>
+            <Button >Open</Button> {/* variant="link" */}
           </Link>
         </Card.Body>
       </Card>
