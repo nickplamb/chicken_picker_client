@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import {BrowserRouter as Router, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import { toLower } from 'lodash';
 
 // Components
@@ -11,6 +11,8 @@ import { BreedCard } from '../breed-card/breed-card';
 import { BreedView } from '../breed-view/breed-view';
 import { RegistrationView } from '../registration-view/registration-view';
 import { ClassView } from '../class-view/class-view';
+import { PurposeView } from '../purpose-view/purpose-view';
+import { ProfileView } from '../profile-view/profile-view';
 
 // Bootstrap components
 import { Row, Col } from 'react-bootstrap';
@@ -25,10 +27,11 @@ export class MainView extends React.Component {
   constructor(){
     super();
     this.state = {
-      breeds: null,
-      selectedBreed: null,
-      user: null,
-      register: null,
+      breeds: [],
+      userEmail: null,
+      username: null,
+      token: null,
+      userFavorites: []
     };
   }
 
@@ -36,13 +39,16 @@ export class MainView extends React.Component {
     let accessToken = localStorage.getItem('token');
     if (accessToken !== null) {
       this.setState({
-        user: localStorage.getItem('user')
+        userEmail: localStorage.getItem('userEmail'),
+        username: localStorage.getItem('username'),
+        token: accessToken
       });
       this.getBreeds(accessToken);
+      this.getUserFavorites(accessToken);
     }
   }
 
-  getBreeds(token){
+  getBreeds(token) {
     axios.get(`${baseUrl}/breeds`, {
       headers: {Authorization: `Bearer ${token}`}
     })
@@ -50,68 +56,134 @@ export class MainView extends React.Component {
       this.setState({
         breeds:res.data
       });
+      // console.log(re s.data)
     })
     .catch(err => {
       console.log('error at getBreeds' + err);
+      // if error, log user out. this deletes local storage items and sets user back to blank.
+      this.onLoggedOut();
     });
   }
 
-  setSelectedBreed(breed) {
-    this.setState({
-      selectedBreed:breed
+  getUserFavorites(token) {
+    axios.get(`${baseUrl}/users/favorites`, {
+      headers: {Authorization: `Bearer ${token}`}
+    })
+    .then(res => {
+      this.setState({
+        userFavorites: res.data
+      });
+      // console.log(res.data)
+    })
+    .catch(err => {
+      console.log('error getting favorites:' + err);
     });
   }
 
   onLoggedIn(authData) {
-    console.log(authData)
+    // console.log(authData);
     this.setState({
-      user: authData.user.email
+      userEmail: authData.user.email,
+      username: authData.user.username,
+      token: authData.token
     });
 
     localStorage.setItem('token', authData.token);
-    localStorage.setItem('user', authData.user.email);
-    this.getBreeds(authData.token)
+    localStorage.setItem('userEmail', authData.user.email);
+    localStorage.setItem('username', authData.user.username);
+    this.getBreeds(authData.token);
+    window.open('/', '_self');
   }
 
   onLoggedOut() {
     console.log('attempting to log out.')
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('username');
     this.setState({
-      user: null
+      userEmail: null,
+      username: null,
+      token: null,
+      userFavorites: [],
+      breeds: []
     });
+    window.open('/login', '_self');
   }
 
-  onGoRegister() {
-    this.setState({
-      register: true
-    });
-  }
-
-  onRegistration(authData) {
-    console.log(authData)
-    this.setState({
-      register: null
-    });
-    // this.onLoggedIn(authData);
-  }
+  // onGoRegister() {
+  //   this.setState({
+  //     register: true
+  //   });
+  // }
 
   render() {
-    const { breeds, selectedBreed, user, register } = this.state;
-    
-    if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-    if (!breeds) return <div className='main-view' />;
-    // if (register) return <RegistrationView onRegistration={user => this.onRegistration(user)} />
+    const { breeds, userEmail, username, userFavorites, token } = this.state;
 
     return (
       <Router>
         <ChickenNavbar logout={() => {this.onLoggedOut()}}/> 
-        <Row className="main-view justify-content-md-center mt-1">
-          <Route exact path="/login" render={<LoginView onLoggedIn={user => this.onLoggedIn(user)} />} />;
-          <Route exact path="/register" render={<RegistrationView onRegistration={user => this.onRegistration(user)} />} />;
-          <Route exact path="/" render={() => <AllBreedsView breeds={breeds} />} />;
-          <Route path="/breeds/:breedName" render={({ match, history }) => <BreedView breed={breeds.find(b => b.breed === match.params.breedName)} onBackClick={() => history.goBack()} /> } />;
-          <Route path="/apaclass/:apaClass" render={({ match, history }) => <ClassView apaClass={match.params.apaClass} breeds={breeds} onBackClick={() => history.goBack()} /> } />;
+        <Row className="main-view justify-content-sm-center mt-1">
+          
+          <Route exact path="/" render={() => {
+            if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
+            if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
+            return <AllBreedsView breeds={breeds} />
+          }} />
+          
+          <Route exact path="/login" 
+            render={() => 
+              <LoginView 
+                onLoggedIn={user => this.onLoggedIn(user)} 
+              />
+            }
+          />
+          
+          <Route exact path="/register" render={() => {
+            if (userEmail) return <Redirect to="/" />
+            return <RegistrationView />
+          }} />
+          
+          <Route exact path="/profile" 
+            render={({ history }) => 
+              <ProfileView 
+                username={username} 
+                userEmail={userEmail} 
+                userFavorites={userFavorites}
+                token={token}
+                onBackClick={()=> history.goBack()} 
+              /> 
+            }
+          />
+
+          <Route path="/breeds/:breedName" 
+            render={({ match, history }) => 
+              <BreedView 
+                breed={breeds.find(b => b.breed === match.params.breedName)} 
+                onBackClick={() => history.goBack()} 
+              /> 
+            }
+          />
+          
+          <Route path="/apaclass/:apaClass" 
+            render={({ match, history }) => 
+              <ClassView 
+                apaClass={match.params.apaClass} 
+                breeds={breeds} 
+                onBackClick={() => history.goBack()} 
+              /> 
+            }
+          />
+          
+          <Route path="/purpose/:purpose" 
+            render={({ match, history }) => 
+              <PurposeView 
+                purpose={match.params.purpose} 
+                breeds={breeds} 
+                onBackClick={()=> history.goBack()} 
+              /> 
+            } 
+          />
+          
         </Row>
       </Router>
     );
