@@ -1,10 +1,11 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Col } from 'react-bootstrap'
 
 import { BreedCard } from '../breed-card/breed-card';
 
-export function AllBreedsView({ breeds }) {
+export function MultiBreedView({ breeds }) {
 
   // console.log(breeds.map(breed => breed.apaClass.name).filter((v, i, s) => s.indexOf(v)===i))
   return(
@@ -17,3 +18,7 @@ export function AllBreedsView({ breeds }) {
     )
   )
 }
+
+MultiBreedView.propTypes = {
+  breeds: PropTypes.array.isRequired,
+};

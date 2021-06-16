@@ -6,7 +6,7 @@ import { toLower } from 'lodash';
 // Components
 import { ChickenNavbar } from '../layout/navbar'
 import { LoginView } from '../login-view/login-view';
-import { AllBreedsView } from '../all-breeds-view/all-breeds-view'
+import { MultiBreedView } from '../multi-breed-view/multi-breed-view'
 import { BreedCard } from '../breed-card/breed-card';
 import { BreedView } from '../breed-view/breed-view';
 import { RegistrationView } from '../registration-view/registration-view';
@@ -127,7 +127,7 @@ export class MainView extends React.Component {
           <Route exact path="/" render={() => {
             if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
             if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
-            return <AllBreedsView breeds={breeds} />
+            return <MultiBreedView breeds={breeds} />
           }} />
           
           <Route exact path="/login" 

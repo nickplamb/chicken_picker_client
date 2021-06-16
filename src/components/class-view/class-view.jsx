@@ -6,7 +6,7 @@ import { upperFirst, toLower } from 'lodash';
 // Styling
 // import './class-view.scss';
 
-import { AllBreedsView } from '../all-breeds-view/all-breeds-view';
+import { MultiBreedView } from '../multi-breed-view/multi-breed-view';
 import { ColoredLine } from '../helperComponents/colored-line';
 const Frankie =  require('url:../../../assets/frankie2.jpeg');
 
@@ -64,7 +64,7 @@ export function ClassView({ breeds, apaClass, onBackClick }) {
         </h3>
       </Col>
 
-      <AllBreedsView breeds={breeds.filter(breed => (toLower(breed.apaClass.name) === toLower(apaClass)))}/>
+      <MultiBreedView breeds={breeds.filter(breed => (toLower(breed.apaClass.name) === toLower(apaClass)))}/>
     </>
   );
 }

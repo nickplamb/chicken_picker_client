@@ -7,7 +7,7 @@ import './profile-view.scss';
 
 // Custom Components
 import ErrorValidationLabel from '../helperComponents/formError';
-import { AllBreedsView } from '../all-breeds-view/all-breeds-view';
+import { MultiBreedView } from '../multi-breed-view/multi-breed-view';
 import { ColoredLine } from '../helperComponents/colored-line';
 
 const Frankie =  require('url:../../../assets/frankie2.jpeg');
@@ -277,7 +277,7 @@ export function ProfileView({ username, userEmail, token, userFavorites, onBackC
       <Col xs={12}>
         <h3>Your Favorite Breeds</h3>
       </Col>
-      <AllBreedsView breeds={userFavorites}/>
+      <MultiBreedView breeds={userFavorites}/>
 
       <Modal 
         show={showModal}

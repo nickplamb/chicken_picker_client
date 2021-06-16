@@ -6,7 +6,7 @@ import { upperFirst, toLower, split } from 'lodash';
 // Styling
 // import './class-view.scss';
 
-import { AllBreedsView } from '../all-breeds-view/all-breeds-view';
+import { MultiBreedView } from '../multi-breed-view/multi-breed-view';
 import { ColoredLine } from '../helperComponents/colored-line';
 const Frankie =  require('url:../../../assets/frankie2.jpeg');
 
@@ -88,7 +88,7 @@ export function PurposeView({ breeds, purpose, onBackClick }) {
         </h3>
       </Col>
 
-      <AllBreedsView breeds={breedsOfSamePurpose}/>
+      <MultiBreedView breeds={breedsOfSamePurpose}/>
     </>
   );
 }
