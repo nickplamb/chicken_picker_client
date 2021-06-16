@@ -34,12 +34,28 @@ export function PurposeView({ breeds, purpose, onBackClick }) {
 
   const displayPurpose = upperFirst(purpose)
 
+  // create an array of all breeds with the same purpose.
   const breedsOfSamePurpose = breeds.filter(breed => {
     const purposeArray = split(breed.purpose, ', ');
-    if (purpose === "Dual-purpose") {
-      return (purposeArray.indexOf('meat') > -1 && purposeArray.indexOf('eggs') > -1 )
+
+    // switch for edge cases dual-purpose and show/exhibition
+    switch (purpose) {
+      case 'Dual-purpose':
+        // dual-purpose breeds are good for meat and eggs. return all breeds with meat and eggs in purpose string
+        return (purposeArray.indexOf('meat') > -1 && purposeArray.indexOf('eggs') > -1 );
+        break;
+      case 'show':
+        // show and exhibition are synonymous. 
+        return (purposeArray.indexOf('show') > -1 || purposeArray.indexOf('exhibition') > -1);
+        break;
+      case 'exhibition':
+        // show and exhibition are synonymous. 
+        return (purposeArray.indexOf('show') > -1 || purposeArray.indexOf('exhibition') > -1);
+        break;
+      default:
+        return purposeArray.indexOf(purpose) > -1; 
+        break;
     }
-    return purposeArray.indexOf(purpose) > -1;
   });
 
 
