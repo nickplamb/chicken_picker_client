@@ -150,6 +150,7 @@ export class MainView extends React.Component {
                 userEmail={userEmail} 
                 userFavorites={userFavorites}
                 token={token}
+                onLoggedOut={this.onLoggedOut}
                 onBackClick={()=> history.goBack()} 
               /> 
             }

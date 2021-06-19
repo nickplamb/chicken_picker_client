@@ -25,7 +25,8 @@ const defaultFieldState = {
   errMsg: "",
 }
 
-export function ProfileView({ username, userEmail, token, userFavorites, onBackClick }) {
+export function ProfileView({ username, userEmail, token, userFavorites, onLoggedOut, onBackClick }) {
+
   const [showModal, setShowModal] = useState(false);
   const [ registrationState, setRegistrationState ] = useState({
     username: {
@@ -186,6 +187,19 @@ export function ProfileView({ username, userEmail, token, userFavorites, onBackC
   onDeregister =() => {
     handleCloseModal();
 
+    axios.delete(`${baseURL}/users`, {
+      headers: {Authorization: `Bearer ${token}`}
+    })
+    .then(res => {
+      const data = res.data;
+      console.log(data);
+      onLoggedOut();
+      window.open('/login', '_self');
+    })
+    .catch(e => {
+      console.log(e);
+    })
+
     console.log("Account deleted")
   }
 
@@ -312,5 +326,6 @@ ProfileView.propTypes = {
   userEmail: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
   userFavorites: PropTypes.array.isRequired,
+  onLoggedOut: PropTypes.func.isRequired,
   onBackClick: PropTypes.func.isRequired
 };
