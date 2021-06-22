@@ -6,7 +6,7 @@ import { Col, Image, Form, Button, Modal} from 'react-bootstrap';
 import './profile-view.scss';
 
 // Custom Components
-import ErrorValidationLabel from '../helperComponents/formError';
+import ErrorValidationLabel from '../helperComponents/form-error';
 import { MultiBreedView } from '../multi-breed-view/multi-breed-view';
 import { ColoredLine } from '../helperComponents/colored-line';
 
@@ -291,7 +291,7 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
       <Col xs={12}>
         <h3>Your Favorite Breeds</h3>
       </Col>
-      <MultiBreedView breeds={userFavorites}/>
+      <MultiBreedView breeds={ userFavorites } token={ token } favoriteBreeds={ userFavorites }/>
 
       <Modal 
         show={showModal}

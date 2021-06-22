@@ -10,7 +10,7 @@ import { MultiBreedView } from '../multi-breed-view/multi-breed-view';
 import { ColoredLine } from '../helperComponents/colored-line';
 const Frankie =  require('url:../../../assets/frankie2.jpeg');
 
-export function PurposeView({ breeds, purpose, onBackClick }) {
+export function PurposeView({ breeds, purpose, onBackClick, token, userFavorites }) {
 
   const purposeDescriptions = {
     "Eggs": "These breeds are used primarily for egg production. The egg layer is leaner and rangier in body type. It will lay more eggs, as a general rule.",
@@ -88,7 +88,7 @@ export function PurposeView({ breeds, purpose, onBackClick }) {
         </h3>
       </Col>
 
-      <MultiBreedView breeds={breedsOfSamePurpose}/>
+      <MultiBreedView breeds={breedsOfSamePurpose} token={ token } favoriteBreeds={ userFavorites } />
     </>
   );
 }

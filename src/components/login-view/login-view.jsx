@@ -5,7 +5,7 @@ import { Col, Row, Form, Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 // Custom components
-import ErrorValidationLabel from '../helperComponents/formError';
+import ErrorValidationLabel from '../helperComponents/form-error';
 
 // Styling
 import './login-view.scss';

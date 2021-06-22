@@ -10,7 +10,7 @@ import { MultiBreedView } from '../multi-breed-view/multi-breed-view';
 import { ColoredLine } from '../helperComponents/colored-line';
 const Frankie =  require('url:../../../assets/frankie2.jpeg');
 
-export function ClassView({ breeds, apaClass, onBackClick }) {
+export function ClassView({ breeds, apaClass, onBackClick, token, userFavorites }) {
 
   const classDescriptions = {
     "American": "The American Class contains thirteen breeds which originated in Canada or the United States. All are heavy breeds, and most lay brown eggs; most are cold-hardy",
@@ -64,7 +64,7 @@ export function ClassView({ breeds, apaClass, onBackClick }) {
         </h3>
       </Col>
 
-      <MultiBreedView breeds={breeds.filter(breed => (toLower(breed.apaClass.name) === toLower(apaClass)))}/>
+      <MultiBreedView breeds={ breeds.filter(breed => (toLower(breed.apaClass.name) === toLower(apaClass))) } token={ token } favoriteBreeds={ userFavorites } />
     </>
   );
 }

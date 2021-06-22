@@ -127,7 +127,7 @@ export class MainView extends React.Component {
           <Route exact path="/" render={() => {
             if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
             if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
-            return <MultiBreedView breeds={breeds} />
+            return <MultiBreedView breeds={ breeds } token={ token } favoriteBreeds={ userFavorites }/>
           }} />
           
           <Route exact path="/login" 
@@ -146,12 +146,12 @@ export class MainView extends React.Component {
           <Route exact path="/profile" 
             render={({ history }) => 
               <ProfileView 
-                username={username} 
-                userEmail={userEmail} 
-                userFavorites={userFavorites}
-                token={token}
-                onLoggedOut={this.onLoggedOut}
-                onBackClick={()=> history.goBack()} 
+                username={ username } 
+                userEmail={ userEmail } 
+                userFavorites={ userFavorites }
+                token={ token }
+                onLoggedOut={ this.onLoggedOut }
+                onBackClick={ ()=> history.goBack() } 
               /> 
             }
           />
@@ -159,28 +159,32 @@ export class MainView extends React.Component {
           <Route path="/breeds/:breedName" 
             render={({ match, history }) => 
               <BreedView 
-                breed={breeds.find(b => b.breed === match.params.breedName)} 
-                onBackClick={() => history.goBack()} 
+                breed={ breeds.find(b => b.breed === match.params.breedName) } 
+                onBackClick={ () => history.goBack() } 
               /> 
             }
           />
-          
+           
           <Route path="/apaclass/:apaClass" 
             render={({ match, history }) => 
               <ClassView 
-                apaClass={match.params.apaClass} 
-                breeds={breeds} 
-                onBackClick={() => history.goBack()} 
+                apaClass={ match.params.apaClass } 
+                breeds={ breeds }
+                token={ token }
+                userFavorites={ userFavorites } 
+                onBackClick={ () => history.goBack() } 
               /> 
             }
           />
-          
+
           <Route path="/purpose/:purpose" 
             render={({ match, history }) => 
               <PurposeView 
-                purpose={match.params.purpose} 
-                breeds={breeds} 
-                onBackClick={()=> history.goBack()} 
+                purpose={ match.params.purpose } 
+                breeds={ breeds }
+                token={ token }
+                userFavorites={ userFavorites } 
+                onBackClick={ ()=> history.goBack() } 
               /> 
             } 
           />

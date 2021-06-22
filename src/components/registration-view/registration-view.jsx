@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 
 // Custom Components
-import ErrorValidationLabel from '../helperComponents/formError';
+import ErrorValidationLabel from '../helperComponents/form-error';
 
 // Styling
 import './registration-view.scss';
