@@ -125,9 +125,9 @@ export class MainView extends React.Component {
         <Row className="main-view justify-content-sm-center mt-1">
           
           <Route exact path="/" render={() => {
-            if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
+            if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
             if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
-            return <MultiBreedView breeds={ breeds } token={ token } favoriteBreeds={ userFavorites }/>
+            return <MultiBreedView breeds={ breeds } token={ token } favoriteBreeds={ userFavorites }/>;
           }} />
           
           <Route exact path="/login" 
@@ -139,59 +139,62 @@ export class MainView extends React.Component {
           />
           
           <Route exact path="/register" render={() => {
-            if (userEmail) return <Redirect to="/" />
-            return <RegistrationView />
+            if (userEmail) return <Redirect to="/" />;
+            return <RegistrationView />;
           }} />
           
           <Route exact path="/profile" 
-            render={({ history }) => 
-              <ProfileView 
+            render={({ history }) => {
+              if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
+              return <ProfileView 
                 username={ username } 
                 userEmail={ userEmail } 
                 userFavorites={ userFavorites }
                 token={ token }
                 onLoggedOut={ this.onLoggedOut }
                 onBackClick={ ()=> history.goBack() } 
-              /> 
-            }
-          />
+              />;
+          }} />
 
           <Route path="/breeds/:breedName" 
-            render={({ match, history }) => 
-              <BreedView 
+            render={({ match, history }) => {
+              if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
+              return <BreedView 
                 breed={ breeds.find(b => b.breed === match.params.breedName) } 
                 onBackClick={ () => history.goBack() } 
-              /> 
-            }
-          />
+              />;
+          }} />
            
           <Route path="/apaclass/:apaClass" 
-            render={({ match, history }) => 
-              <ClassView 
+            render={({ match, history }) => {
+              if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
+              return <ClassView 
                 apaClass={ match.params.apaClass } 
                 breeds={ breeds }
                 token={ token }
                 userFavorites={ userFavorites } 
                 onBackClick={ () => history.goBack() } 
-              /> 
-            }
-          />
+              />;
+          }} />
 
           <Route path="/purpose/:purpose" 
-            render={({ match, history }) => 
-              <PurposeView 
+            render={({ match, history }) => {
+              if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
+              return <PurposeView 
                 purpose={ match.params.purpose } 
                 breeds={ breeds }
                 token={ token }
                 userFavorites={ userFavorites } 
                 onBackClick={ ()=> history.goBack() } 
-              /> 
-            } 
-          />
+              />;
+          }} />
           
         </Row>
       </Router>
     );
   }
 }
-// <BreedView breed={selectedBreed} onBackClick={newSelectedBreed => {this.setSelectedBreed(newSelectedBreed)}} />
