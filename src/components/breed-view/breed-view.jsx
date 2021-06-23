@@ -43,12 +43,15 @@ export class BreedView extends React.Component {
               </p>
               <p>
                 <span className="label">Purpose: </span>
-                {breedsPurpose.map((purpose, index, array) => (
-                  <Link to={purpose === 'show' ? '/purpose/exhibition' : `/purpose/${purpose}`}>
-                    <span className="value">{purpose}</span>
-                    {index < array.length && array.length > 1 ? ", ": ""}
-                  </Link>
-                ))}
+                {breedsPurpose.map((purpose, index, array) => {
+                  const correctedPurpose = (purpose === 'show' ? 'exhibition' : purpose)
+                  return (
+                    <Link to={`/purpose/${correctedPurpose}`} key={correctedPurpose}>
+                      <span className="value">{purpose}</span>
+                      {index < array.length && array.length > 1 ? ", ": ""}
+                    </Link>
+                  )
+                })}
               </p>
               <p>
                 <span className="label">Egg Color: </span>
