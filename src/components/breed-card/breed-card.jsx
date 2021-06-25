@@ -10,7 +10,7 @@ const Frankie = require('url:../../../assets/frankie2.jpeg');
 // Styling
 import './breed-card.scss';
 
-export function BreedCard({ breed, isFavorite, token }) {
+export function BreedCard({ breed, favoritesToggle }) {
 
   return (
     <Card>
@@ -28,7 +28,7 @@ export function BreedCard({ breed, isFavorite, token }) {
         <Link to={`/breeds/${breed.breed}`}>
           <Button >Open</Button> {/* variant="link" */}
         </Link>
-        <FavoritesToggle breed={ breed } token={ token } isFavorite={ isFavorite }/>
+        { favoritesToggle }
       </Card.Body>
     </Card>
   )
@@ -41,6 +41,9 @@ BreedCard.propTypes = {
     eggColor: PropTypes.string.isRequired,
     eggSize: PropTypes.string
   }).isRequired,
-  isFavorite: PropTypes.bool.isRequired,
-  token: PropTypes.string.isRequired
+  favoritesToggle: PropTypes.element.isRequired
+  // isFavorite: PropTypes.bool.isRequired,
+  // token: PropTypes.string.isRequired,
+  // favoritesArray: PropTypes.array,
+  // onFavoritesToggle: PropTypes.func.isRequired
 };
