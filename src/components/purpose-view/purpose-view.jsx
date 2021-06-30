@@ -8,7 +8,8 @@ import { upperFirst, toLower, split } from 'lodash';
 
 import MultiBreedView from '../multi-breed-view/multi-breed-view';
 import { ColoredLine } from '../helperComponents/colored-line';
-const Frankie =  require('url:../../../assets/frankie2.jpeg');
+import Frankie from 'url:../../../assets/frankie2.jpeg';
+// const Frankie =  require('url:../../../assets/frankie2.jpeg');
 
 export function PurposeView({ breeds, purpose, onBackClick, token, userFavorites }) {
 

@@ -5,7 +5,8 @@ import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 
 import { FavoritesToggle } from '../favorites-toggle/favorites-toggle';
-const Frankie = require('url:../../../assets/frankie2.jpeg');
+import Frankie from 'url:../../../assets/frankie2.jpeg';
+// const Frankie = require('url:../../../assets/frankie2.jpeg');
 
 // Styling
 import './breed-card.scss';
