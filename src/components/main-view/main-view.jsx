@@ -1,7 +1,10 @@
 import React from 'react';
 import axios from 'axios';
 import {BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { toLower } from 'lodash';
+
+import { setBreeds } from '../../actions/actions';
 
 // Components
 import { ChickenNavbar } from '../layout/navbar'
@@ -22,12 +25,11 @@ import './main-view.scss';
 
 let baseUrl = 'https://chickens-api.herokuapp.com';
 
-export class MainView extends React.Component {
+class MainView extends React.Component {
 
   constructor(){
     super();
     this.state = {
-      breeds: [],
       userEmail: null,
       username: null,
       token: null,
@@ -53,10 +55,7 @@ export class MainView extends React.Component {
       headers: {Authorization: `Bearer ${token}`}
     })
     .then(res => {
-      this.setState({
-        breeds:res.data
-      });
-      // console.log(re s.data)
+      this.props.setBreeds(res.data)
     })
     .catch(err => {
       console.log('error at getBreeds' + err);
@@ -117,7 +116,8 @@ export class MainView extends React.Component {
   // }
 
   render() {
-    const { breeds, userEmail, username, userFavorites, token } = this.state;
+    const { userEmail, username, userFavorites, token } = this.state;
+    const { breeds } = this.props;
 
     return (
       <Router>
@@ -198,3 +198,9 @@ export class MainView extends React.Component {
     );
   }
 }
+
+let mapStateToProps = state => {
+  return { breeds: state.breeds }
+}
+
+export default connect(mapStateToProps, { setBreeds } )(MainView);
