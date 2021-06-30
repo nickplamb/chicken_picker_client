@@ -7,7 +7,7 @@ import './profile-view.scss';
 
 // Custom Components
 import ErrorValidationLabel from '../helperComponents/form-error';
-import { MultiBreedView } from '../multi-breed-view/multi-breed-view';
+import MultiBreedView from '../multi-breed-view/multi-breed-view';
 import { ColoredLine } from '../helperComponents/colored-line';
 
 const Frankie =  require('url:../../../assets/frankie2.jpeg');

@@ -9,7 +9,7 @@ import { setBreeds } from '../../actions/actions';
 // Components
 import { ChickenNavbar } from '../layout/navbar'
 import { LoginView } from '../login-view/login-view';
-import { MultiBreedView } from '../multi-breed-view/multi-breed-view'
+import MultiBreedView from '../multi-breed-view/multi-breed-view'
 import { BreedCard } from '../breed-card/breed-card';
 import { BreedView } from '../breed-view/breed-view';
 import { RegistrationView } from '../registration-view/registration-view';
