@@ -90,6 +90,7 @@ export function LoginView({ onLoggedIn }) {
       })
       .then(res => {
         const data = res.data;
+        console.log(data);
         onLoggedIn(data);
       })
       .catch(err => {

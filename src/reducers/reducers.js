@@ -29,8 +29,12 @@ function breeds(state = [], action) {
 function user(state = {}, action) {
   switch (action.type) {
       case SET_USER:
-        return action.value;
+        return {
+          ...state,
+          ...action.value
+        };
       case SET_TOKEN:
+        console.log(action)
         return {
           ...state,
           token: action.value

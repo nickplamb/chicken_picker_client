@@ -4,7 +4,7 @@ import {BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toLower } from 'lodash';
 
-import { setBreeds } from '../../actions/actions';
+import { setBreeds, setUser, setToken, setUserFavorites } from '../../actions/actions';
 
 // Components
 import { ChickenNavbar } from '../layout/navbar'
@@ -25,26 +25,28 @@ import './main-view.scss';
 
 let baseUrl = 'https://chickens-api.herokuapp.com';
 
+
 class MainView extends React.Component {
 
   constructor(){
     super();
-    this.state = {
-      userEmail: null,
-      username: null,
-      token: null,
-      userFavorites: []
-    };
+    // this.state = {
+    //   userEmail: null,
+    //   username: null,
+    //   token: null,
+    //   userFavorites: []
+    // };
   }
 
   componentDidMount() {
     let accessToken = localStorage.getItem('token');
     if (accessToken !== null) {
-      this.setState({
+      this.props.setUser({
         userEmail: localStorage.getItem('userEmail'),
         username: localStorage.getItem('username'),
-        token: accessToken
       });
+      this.props.setToken(accessToken);
+
       this.getBreeds(accessToken);
       this.getUserFavorites(accessToken);
     }
@@ -69,9 +71,7 @@ class MainView extends React.Component {
       headers: {Authorization: `Bearer ${token}`}
     })
     .then(res => {
-      this.setState({
-        userFavorites: res.data
-      });
+      this.props.setUserFavorites(res.data);
       // console.log(res.data)
     })
     .catch(err => {
@@ -81,11 +81,11 @@ class MainView extends React.Component {
 
   onLoggedIn(authData) {
     // console.log(authData);
-    this.setState({
+    this.props.setUser({
       userEmail: authData.user.email,
       username: authData.user.username,
-      token: authData.token
     });
+    this.props.setToken(authData.token)
 
     localStorage.setItem('token', authData.token);
     localStorage.setItem('userEmail', authData.user.email);
@@ -116,8 +116,7 @@ class MainView extends React.Component {
   // }
 
   render() {
-    const { userEmail, username, userFavorites, token } = this.state;
-    const { breeds } = this.props;
+    const { breeds, user } = this.props;
 
     return (
       <Router>
@@ -125,9 +124,9 @@ class MainView extends React.Component {
         <Row className="main-view justify-content-sm-center mt-1">
           
           <Route exact path="/" render={() => {
-            if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+            if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
             if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
-            return <MultiBreedView breeds={ breeds } token={ token } favoriteBreeds={ userFavorites }/>;
+            return <MultiBreedView breeds={ breeds } token={ user.token } favoriteBreeds={ user.favorites }/>;
           }} />
           
           <Route exact path="/login" 
@@ -139,19 +138,19 @@ class MainView extends React.Component {
           />
           
           <Route exact path="/register" render={() => {
-            if (userEmail) return <Redirect to="/" />;
+            if (user.userEmail) return <Redirect to="/" />;
             return <RegistrationView />;
           }} />
           
           <Route exact path="/profile" 
             render={({ history }) => {
-              if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
               if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <ProfileView 
-                username={ username } 
-                userEmail={ userEmail } 
-                userFavorites={ userFavorites }
-                token={ token }
+                username={ user.username } 
+                userEmail={ user.userEmail } 
+                userFavorites={ user.favorites }
+                token={ user.token }
                 onLoggedOut={ this.onLoggedOut }
                 onBackClick={ ()=> history.goBack() } 
               />;
@@ -159,7 +158,7 @@ class MainView extends React.Component {
 
           <Route path="/breeds/:breedName" 
             render={({ match, history }) => {
-              if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
               if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <BreedView 
                 breed={ breeds.find(b => b.breed === match.params.breedName) } 
@@ -169,26 +168,26 @@ class MainView extends React.Component {
            
           <Route path="/apaclass/:apaClass" 
             render={({ match, history }) => {
-              if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
               if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <ClassView 
                 apaClass={ match.params.apaClass } 
                 breeds={ breeds }
-                token={ token }
-                userFavorites={ userFavorites } 
+                token={ user.token }
+                userFavorites={ user.favorites } 
                 onBackClick={ () => history.goBack() } 
               />;
           }} />
 
           <Route path="/purpose/:purpose" 
             render={({ match, history }) => {
-              if (!userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
               if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <PurposeView 
                 purpose={ match.params.purpose } 
                 breeds={ breeds }
-                token={ token }
-                userFavorites={ userFavorites } 
+                token={ user.token }
+                userFavorites={ user.favorites } 
                 onBackClick={ ()=> history.goBack() } 
               />;
           }} />
@@ -200,7 +199,10 @@ class MainView extends React.Component {
 }
 
 let mapStateToProps = state => {
-  return { breeds: state.breeds }
+  return { 
+    breeds: state.breeds,
+    user: state.user,
+  }
 }
 
-export default connect(mapStateToProps, { setBreeds } )(MainView);
+export default connect(mapStateToProps, { setBreeds, setToken, setUser, setUserFavorites } )(MainView);
