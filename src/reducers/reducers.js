@@ -1,6 +1,12 @@
 import { combineReducers } from "redux";
 
-import { SET_BREEDS, SET_FILTER } from "../actions/actions";
+import { 
+  SET_BREEDS, 
+  SET_FILTER, 
+  SET_USER, 
+  SET_TOKEN, 
+  SET_USER_FAVORITES 
+} from "../actions/actions";
 
 function visibilityFilter (state = '', action) {
   switch (action.type) {
