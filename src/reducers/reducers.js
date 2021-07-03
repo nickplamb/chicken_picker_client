@@ -5,13 +5,16 @@ import {
   SET_FILTER, 
   SET_USER, 
   SET_TOKEN, 
-  SET_USER_FAVORITES 
+  SET_USER_FAVORITES,
+  USER_LOGOUT
 } from "../actions/actions";
 
 function visibilityFilter (state = '', action) {
   switch (action.type) {
     case SET_FILTER:
       return action.value;
+    case USER_LOGOUT:
+      return '';
     default:
       return state;
   }
@@ -21,6 +24,8 @@ function breeds(state = [], action) {
   switch (action.type) {
     case SET_BREEDS:
       return action.value;
+    case USER_LOGOUT:
+      return [];
     default:
       return state;
   }
@@ -31,7 +36,8 @@ function user(state = {}, action) {
       case SET_USER:
         return {
           ...state,
-          ...action.value
+          username: action.value.username,
+          userEmail: action.value.userEmail
         };
       case SET_TOKEN:
         console.log(action)
@@ -44,6 +50,8 @@ function user(state = {}, action) {
           ...state,
           favorites: action.value
         };
+      case USER_LOGOUT:
+        return {};
       default:
         return state;
     // case SET_USERNAME:
@@ -78,5 +86,13 @@ const breedsApp = combineReducers({
   breeds,
   user
 })
+
+// https://stackoverflow.com/questions/35622588/how-to-reset-the-state-of-a-redux-store
+// const breedsApp = (state, action) => {
+//   if (action.type === USER_LOGOUT) {
+//     return appReducer(undefined, action);
+//   }
+//   return appReducer(state, action);
+// }
 
 export default breedsApp;

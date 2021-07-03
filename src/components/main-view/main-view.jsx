@@ -4,7 +4,7 @@ import {BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toLower } from 'lodash';
 
-import { setBreeds, setUser, setToken, setUserFavorites } from '../../actions/actions';
+import { setBreeds, setUser, setToken, setUserFavorites, userLogout } from '../../actions/actions';
 
 // Components
 import { ChickenNavbar } from '../layout/navbar'
@@ -90,7 +90,7 @@ class MainView extends React.Component {
     localStorage.setItem('token', authData.token);
     localStorage.setItem('userEmail', authData.user.email);
     localStorage.setItem('username', authData.user.username);
-    this.getBreeds(authData.token);
+    // this.getBreeds(authData.token);
     window.open('/', '_self');
   }
 
@@ -99,21 +99,10 @@ class MainView extends React.Component {
     localStorage.removeItem('token');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('username');
-    this.setState({
-      userEmail: null,
-      username: null,
-      token: null,
-      userFavorites: [],
-      breeds: []
-    });
+
+    this.props.userLogout();
     window.open('/login', '_self');
   }
-
-  // onGoRegister() {
-  //   this.setState({
-  //     register: true
-  //   });
-  // }
 
   render() {
     const { breeds, user } = this.props;
@@ -198,11 +187,19 @@ class MainView extends React.Component {
   }
 }
 
-let mapStateToProps = state => {
+const mapStateToProps = state => {
   return { 
     breeds: state.breeds,
     user: state.user,
   }
 }
 
-export default connect(mapStateToProps, { setBreeds, setToken, setUser, setUserFavorites } )(MainView);
+const actionCreators = {
+  setBreeds,
+  setToken,
+  setUser,
+  setUserFavorites,
+  userLogout
+}
+
+export default connect(mapStateToProps, actionCreators)(MainView);
