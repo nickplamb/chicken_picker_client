@@ -47,6 +47,7 @@ class MainView extends React.Component {
       });
       this.props.setToken(accessToken);
 
+      // loadAllData()
       this.getBreeds(accessToken);
       this.getUserFavorites(accessToken);
     }
@@ -60,9 +61,10 @@ class MainView extends React.Component {
       this.props.setBreeds(res.data)
     })
     .catch(err => {
-      console.log('error at getBreeds' + err);
+      console.log('error at getBreeds ' + err);
+      console.log(err)
       // if error, log user out. this deletes local storage items and sets user back to blank.
-      this.onLoggedOut();
+      // this.onLoggedOut();
     });
   }
 
@@ -72,7 +74,6 @@ class MainView extends React.Component {
     })
     .then(res => {
       this.props.setUserFavorites(res.data);
-      // console.log(res.data)
     })
     .catch(err => {
       console.log('error getting favorites:' + err);
@@ -115,7 +116,7 @@ class MainView extends React.Component {
           <Route exact path="/" render={() => {
             if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
             if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
-            return <MultiBreedView breeds={ breeds } token={ user.token } favoriteBreeds={ user.favorites }/>;
+            return <MultiBreedView breeds={ breeds } />;
           }} />
           
           <Route exact path="/login" 

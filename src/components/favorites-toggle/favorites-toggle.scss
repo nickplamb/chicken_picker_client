@@ -1,9 +1,12 @@
 .toggle-star {
   font-size: 40px;
-  color: grey;
-  
+  cursor: pointer;
 }
 
-.toggle-Star__favorite {
+.toggle-Star__grey {
+  color: grey;
+}
+
+.toggle-Star__gold {
     color: yellow
 }

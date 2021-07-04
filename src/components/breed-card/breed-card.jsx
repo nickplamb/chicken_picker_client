@@ -4,14 +4,14 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 
-import { FavoritesToggle } from '../favorites-toggle/favorites-toggle';
+import FavoritesToggle from '../favorites-toggle/favorites-toggle';
 import Frankie from 'url:../../../assets/frankie2.jpeg';
 // const Frankie = require('url:../../../assets/frankie2.jpeg');
 
 // Styling
 import './breed-card.scss';
 
-export function BreedCard({ breed, favoritesToggle }) {
+export function BreedCard({ breed }) {
 
   return (
     <Card>
@@ -29,7 +29,7 @@ export function BreedCard({ breed, favoritesToggle }) {
         <Link to={`/breeds/${breed.breed}`}>
           <Button >Open</Button> {/* variant="link" */}
         </Link>
-        { favoritesToggle }
+        <FavoritesToggle breed={breed} />
       </Card.Body>
     </Card>
   )
@@ -42,7 +42,7 @@ BreedCard.propTypes = {
     eggColor: PropTypes.string.isRequired,
     eggSize: PropTypes.string
   }).isRequired,
-  favoritesToggle: PropTypes.element.isRequired
+  // favoritesToggle: PropTypes.element.isRequired
   // isFavorite: PropTypes.bool.isRequired,
   // token: PropTypes.string.isRequired,
   // favoritesArray: PropTypes.array,
