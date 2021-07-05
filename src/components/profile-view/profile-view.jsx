@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { Col, Image, Form, Button, Modal} from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Col, Form, Button, Modal} from 'react-bootstrap';
 
 import './profile-view.scss';
 
@@ -25,7 +26,7 @@ const defaultFieldState = {
   errMsg: "",
 }
 
-export function ProfileView({ username, userEmail, token, userFavorites, onLoggedOut, onBackClick }) {
+export function ProfileView({ user, userToken, userFavorites, onLoggedOut, onBackClick }) {
 
   const [showModal, setShowModal] = useState(false);
   const [ registrationState, setRegistrationState ] = useState({
@@ -116,7 +117,7 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
       formValues.username.value && (data.username = formValues.username.value);
 
       axios.put(`${baseURL}/users`, data , {
-        headers: {Authorization: `Bearer ${token}`}
+        headers: {Authorization: `Bearer ${userToken}`}
       })
       .then(res => {
         const data = res.data;
@@ -188,7 +189,7 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
     handleCloseModal();
 
     axios.delete(`${baseURL}/users`, {
-      headers: {Authorization: `Bearer ${token}`}
+      headers: {Authorization: `Bearer ${userToken}`}
     })
     .then(res => {
       const data = res.data;
@@ -206,7 +207,7 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
   return (
     <>
       <Col xs={12}>
-        <h1>Hello {username}!</h1>
+        <h1>Hello {user.username}!</h1>
       </Col>
       <Col md={6}>
         <Form 
@@ -222,7 +223,7 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
                 <Form.Control 
                   type="text" 
                   name="username"
-                  placeholder={username}
+                  placeholder={user.username}
                   pattern="[\w\d]*"
                   minLength="5"
                   autoComplete="off"
@@ -291,7 +292,7 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
       <Col xs={12}>
         <h3>Your Favorite Breeds</h3>
       </Col>
-      <MultiBreedView breeds={ userFavorites } token={ token } favoriteBreeds={ userFavorites }/>
+      <MultiBreedView breeds={ userFavorites } />
 
       <Modal 
         show={showModal}
@@ -321,11 +322,20 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
   )
 }
 
-ProfileView.propTypes = {
-  username: PropTypes.string.isRequired,
-  userEmail: PropTypes.string.isRequired,
-  token: PropTypes.string.isRequired,
-  userFavorites: PropTypes.array.isRequired,
-  onLoggedOut: PropTypes.func.isRequired,
-  onBackClick: PropTypes.func.isRequired
+const mapStateToProps = state => {
+  return { 
+    userToken: state.user.token,
+    user: state.user,
+    userFavorites: state.user.favorites
+  }
 };
+
+export default connect(mapStateToProps)(ProfileView);
+
+// ProfileView.propTypes = {
+//   user: PropTypes.object.isRequired,
+//   userToken: PropTypes.string.isRequired,
+//   userFavorites: PropTypes.array.isRequired,
+//   onLoggedOut: PropTypes.func.isRequired,
+//   onBackClick: PropTypes.func.isRequired
+// };
