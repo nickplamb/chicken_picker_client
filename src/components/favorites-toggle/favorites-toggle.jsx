@@ -12,19 +12,23 @@ const baseURL = 'https://chickens-api.herokuapp.com';
 const filledInStarIcon = '\u2605';
 const outlineStarIcon = '\u2606';
 
-export function FavoritesToggle({ breed, userFavorites, userToken })  {
-  const isAFavoriteBreed = userFavorites.map(favoriteBreed => favoriteBreed._id).indexOf(breed._id) > -1 ? true : false;
+// Props: breed is from parent, rest from redux connect()
+export function FavoritesToggle({ breed, userFavorites, userToken, setUserFavorites })  {
+  const [isHovered, setIsHovered] = useState(false)
 
-  // Check if the id of breed prop is in the array of favorite breeds
-  const favoriteStarColorClass = (isHighlighted=false) => {
-    if ((isHighlighted &&  isAFavoriteBreed) || (!isHighlighted && !isAFavoriteBreed)) return 'toggle-Star__grey';
-    if ((isHighlighted && !isAFavoriteBreed) || (!isHighlighted &&  isAFavoriteBreed)) return 'toggle-Star__gold';
+  // is this breed in the users favorites array? true or false
+  const isAFavoriteBreed = (userFavorites.map(favoriteBreed => favoriteBreed._id).indexOf(breed._id)) > -1 ? true : false;
+
+  // two state, grey or gold. if is a favorite then it starts gold and highlights grey and vice versa
+  const favoriteStarColorClass = () => {
+    if ((isHovered &&  isAFavoriteBreed) || (!isHovered && !isAFavoriteBreed)) return 'toggle-Star__grey';
+    if ((isHovered && !isAFavoriteBreed) || (!isHovered &&  isAFavoriteBreed)) return 'toggle-Star__gold';
 
     // (isAFavoriteBreed ? 1 :0) ^ (isHighlighted ? 1 : 0)
   }
   
   let isFavoriteIcon = isAFavoriteBreed ? filledInStarIcon : outlineStarIcon;
-  let favoriteColorClass = favoriteStarColorClass(false);// false for not highlighted.
+  let favoriteColorClass = favoriteStarColorClass();// false for not highlighted.
 
 
   let axiosConfig = {
@@ -32,16 +36,9 @@ export function FavoritesToggle({ breed, userFavorites, userToken })  {
     headers:  {Authorization: `Bearer ${userToken}`}
   }
 
-  const onHover = e => {
-    // const star = e.target;
-    if (!isAFavoriteBreed) favoriteStarColorClass(true); // is highlighted
-  }
+  // https://stackoverflow.com/questions/44575727/react-js-toggle-adding-a-class-on-hover
+  const toggleHover = () => setIsHovered(() => !isHovered);
 
-  const onNotHover = e => {
-    // const star = e.target;
-    if (!isAFavoriteBreed) favoriteStarColorClass(false); // is no longer highlighted
-  }
-  
   const onClick = e => {
     if (!isAFavoriteBreed) {
       axiosConfig.method = 'post';
@@ -55,19 +52,22 @@ export function FavoritesToggle({ breed, userFavorites, userToken })  {
 
     axios(axiosConfig)
       .then(res => {
-        setUserFavorites(res.data)
+        setUserFavorites(res.data);
       })
-      .catch(e => {
-        console.log(e);
+      .catch(err => {
+        console.log(err);
       })
   }
 
+  if (!userFavorites) return <span> ?? </span>
   return (
     <span 
-      className={`toggle-star ${favoriteColorClass}`}
+      className={`toggle-star ${favoriteStarColorClass()}`}
       id={`${breed.breed}-toggle-star`}
-      onMouseOver={onHover}
-      onMouseOut={onNotHover}
+      onMouseEnter={toggleHover}
+      onMouseLeave={toggleHover}
+      // onMouseOver={onHover}
+      // onMouseOut={onNotHover}
       onClick={onClick}
     >
       {isFavoriteIcon}
