@@ -117,8 +117,8 @@ export function RegistrationView() {
       })
       .then(res => {
         const data = res.data;
-        console.log('res data');
-        console.log(data);
+        // console.log('registration data');
+        // console.log(data);
         window.open('/', '_self');
         // onRegistration(data);
       })

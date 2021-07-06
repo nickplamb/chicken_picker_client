@@ -90,7 +90,7 @@ export function LoginView({ onLoggedIn }) {
       })
       .then(res => {
         const data = res.data;
-        console.log(data);
+        // console.log(data);
         onLoggedIn(data);
       })
       .catch(err => {
@@ -104,11 +104,6 @@ export function LoginView({ onLoggedIn }) {
   // display error msg based on valid property in state.
   const renderEmailValidationError = loginState.email.valid ? "" : <ErrorValidationLabel labelTxt={loginState.email.typeMismatch ? loginState.email.formatErrorTxt : loginState.email.requiredTxt} htmlFor="email"/>;
   const renderPasswordValidationError = loginState.password.valid ? "" : <ErrorValidationLabel labelTxt={loginState.password.requiredTxt} htmlFor="password"/>;
-
-  const handleRegister = (e) => {
-    e.preventDefault();
-    onGoRegister();
-  }
 
   return (
     // <Row className="justify-content-md-center">
@@ -167,6 +162,5 @@ export function LoginView({ onLoggedIn }) {
 }
 
 LoginView.propTypes = {
-  // onGoRegister: PropTypes.func.isRequired,
   onLoggedIn: PropTypes.func.isRequired,
 };
