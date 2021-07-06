@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Col } from 'react-bootstrap';
 import { upperFirst, toLower, split } from 'lodash';
+import { connect } from 'react-redux';
 
 // Styling
 // import './class-view.scss';
@@ -11,7 +12,8 @@ import { ColoredLine } from '../helperComponents/colored-line';
 import Frankie from 'url:../../../assets/frankie2.jpeg';
 // const Frankie =  require('url:../../../assets/frankie2.jpeg');
 
-export function PurposeView({ breeds, purpose, onBackClick, token, userFavorites }) {
+// purpose and onBackClick from parent, rest from state
+export function PurposeView({ purpose, onBackClick, allBreeds }) {
 
   const purposeDescriptions = {
     "Eggs": "These breeds are used primarily for egg production. The egg layer is leaner and rangier in body type. It will lay more eggs, as a general rule.",
@@ -36,7 +38,7 @@ export function PurposeView({ breeds, purpose, onBackClick, token, userFavorites
   const displayPurpose = upperFirst(purpose)
 
   // create an array of all breeds with the same purpose.
-  const breedsOfSamePurpose = breeds.filter(breed => {
+  const breedsOfSamePurpose = allBreeds.filter(breed => {
     const purposeArray = split(breed.purpose, ', ');
 
     // switch for edge cases dual-purpose and show/exhibition
@@ -89,13 +91,21 @@ export function PurposeView({ breeds, purpose, onBackClick, token, userFavorites
         </h3>
       </Col>
 
-      <MultiBreedView breeds={breedsOfSamePurpose} token={ token } favoriteBreeds={ userFavorites } />
+      <MultiBreedView breedsToDisplay={breedsOfSamePurpose} />
     </>
   );
 }
 
+const mapStateToProps = state => {
+  return { 
+    allBreeds: state.breeds
+  }
+};
+
+export default connect(mapStateToProps)(PurposeView);
+
 PurposeView.propTypes = {
-  breeds: PropTypes.array.isRequired,
+  allBreeds: PropTypes.array.isRequired,
   purpose: PropTypes.string.isRequired,
   onBackClick: PropTypes.func.isRequired
 };

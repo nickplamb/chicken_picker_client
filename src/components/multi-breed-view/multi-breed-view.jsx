@@ -8,16 +8,15 @@ import { BreedCard } from '../breed-card/breed-card';
 import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-input';
 import { FavoritesToggle } from '../favorites-toggle/favorites-toggle';
 
-
-
-function MultiBreedView({ breeds, user, visibilityFilter }) {
-  let filteredBreeds = breeds;
+// Props: Breeds passed from parent, visibilityFilter from store
+function MultiBreedView({ breedsToDisplay, visibilityFilter }) {
+  let filteredBreeds = breedsToDisplay;
 
   if (visibilityFilter !== ''){
-    filteredBreeds = breeds.filter(breed => breed.breed.toLowerCase().includes(visibilityFilter.toLowerCase()));
+    filteredBreeds = breedsToDisplay.filter(breed => breed.breed.toLowerCase().includes(visibilityFilter.toLowerCase()));
   }
 
-  if (!breeds) return <div className="main-view" />;
+  if (!breedsToDisplay) return <div className="main-view" />;
 
   return(
     <>
@@ -38,8 +37,7 @@ function MultiBreedView({ breeds, user, visibilityFilter }) {
 }
 
 const mapStateToProps = state => {
-  const { visibilityFilter, user } = state;
-  return { visibilityFilter, user }
+  return { visibilityFilter: state.visibilityFilter }
 };
 
 export default connect(mapStateToProps)(MultiBreedView);

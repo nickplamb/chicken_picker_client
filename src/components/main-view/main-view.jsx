@@ -15,7 +15,7 @@ import { BreedView } from '../breed-view/breed-view';
 import { RegistrationView } from '../registration-view/registration-view';
 import { ClassView } from '../class-view/class-view';
 import { PurposeView } from '../purpose-view/purpose-view';
-import { ProfileView } from '../profile-view/profile-view';
+import ProfileView from '../profile-view/profile-view';
 
 // Bootstrap components
 import { Row, Col } from 'react-bootstrap';
@@ -116,7 +116,7 @@ class MainView extends React.Component {
           <Route exact path="/" render={() => {
             if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
             if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
-            return <MultiBreedView breeds={ breeds } />;
+            return <MultiBreedView breedsToDisplay={ breeds } />;
           }} />
           
           <Route exact path="/login" 
@@ -137,10 +137,6 @@ class MainView extends React.Component {
               if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
               if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <ProfileView 
-                username={ user.username } 
-                userEmail={ user.userEmail } 
-                userFavorites={ user.favorites }
-                token={ user.token }
                 onLoggedOut={ this.onLoggedOut }
                 onBackClick={ ()=> history.goBack() } 
               />;
@@ -162,9 +158,6 @@ class MainView extends React.Component {
               if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <ClassView 
                 apaClass={ match.params.apaClass } 
-                breeds={ breeds }
-                token={ user.token }
-                userFavorites={ user.favorites } 
                 onBackClick={ () => history.goBack() } 
               />;
           }} />

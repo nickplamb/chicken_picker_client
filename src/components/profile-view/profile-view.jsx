@@ -17,6 +17,7 @@ const baseURL = 'https://chickens-api.herokuapp.com';
 
 // state fields that are not unique.
 const defaultFieldState = {
+
   value: "",
   valid: true,
   typeMismatch: false,
@@ -26,7 +27,8 @@ const defaultFieldState = {
   errMsg: "",
 }
 
-export function ProfileView({ user, userToken, userFavorites, onLoggedOut, onBackClick }) {
+// onLoggedOut and onBackClick from parent, rest from state
+export function ProfileView({ onLoggedOut, onBackClick, user, userToken, userFavorites }) {
 
   const [showModal, setShowModal] = useState(false);
   const [ registrationState, setRegistrationState ] = useState({
@@ -292,7 +294,7 @@ export function ProfileView({ user, userToken, userFavorites, onLoggedOut, onBac
       <Col xs={12}>
         <h3>Your Favorite Breeds</h3>
       </Col>
-      <MultiBreedView breeds={ userFavorites } />
+      <MultiBreedView breedsToDisplay={ userFavorites } />
 
       <Modal 
         show={showModal}
