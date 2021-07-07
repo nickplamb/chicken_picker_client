@@ -2,23 +2,22 @@ import React from 'react';
 import axios from 'axios';
 import {BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { toLower } from 'lodash';
+import PropTypes from 'prop-types';
 
 import { setBreeds, setUser, setToken, setUserFavorites, userLogout } from '../../actions/actions';
 
 // Components
-import { ChickenNavbar } from '../layout/navbar'
-import { LoginView } from '../login-view/login-view';
-import MultiBreedView from '../multi-breed-view/multi-breed-view'
-import { BreedCard } from '../breed-card/breed-card';
-import { BreedView } from '../breed-view/breed-view';
-import { RegistrationView } from '../registration-view/registration-view';
-import { ClassView } from '../class-view/class-view';
-import { PurposeView } from '../purpose-view/purpose-view';
+import ChickenNavbar from '../layout/navbar';
+import LoginView from '../login-view/login-view';
+import MultiBreedView from '../multi-breed-view/multi-breed-view';
+import BreedView from '../breed-view/breed-view';
+import RegistrationView from '../registration-view/registration-view';
+import ClassView from '../class-view/class-view';
+import PurposeView from '../purpose-view/purpose-view';
 import ProfileView from '../profile-view/profile-view';
 
 // Bootstrap components
-import { Row, Col } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 
 // Styling
 import './main-view.scss';
@@ -30,12 +29,6 @@ class MainView extends React.Component {
 
   constructor(){
     super();
-    // this.state = {
-    //   userEmail: null,
-    //   username: null,
-    //   token: null,
-    //   userFavorites: []
-    // };
   }
 
   componentDidMount() {
@@ -64,7 +57,7 @@ class MainView extends React.Component {
       console.log('error at getBreeds ' + err);
       console.log(err)
       // if error, log user out. this deletes local storage items and sets user back to blank.
-      // this.onLoggedOut();
+      this.onLoggedOut();
     });
   }
 
@@ -92,6 +85,7 @@ class MainView extends React.Component {
     localStorage.setItem('userEmail', authData.user.email);
     localStorage.setItem('username', authData.user.username);
     // this.getBreeds(authData.token);
+    // this.getUserFavorites(authData.token);
     window.open('/', '_self');
   }
 
@@ -101,12 +95,13 @@ class MainView extends React.Component {
     localStorage.removeItem('userEmail');
     localStorage.removeItem('username');
 
+    console.log(this)
     this.props.userLogout();
     window.open('/login', '_self');
   }
 
   render() {
-    const { breeds, user } = this.props;
+    const { allBreeds, user } = this.props;
 
     return (
       <Router>
@@ -115,8 +110,8 @@ class MainView extends React.Component {
           
           <Route exact path="/" render={() => {
             if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-            if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
-            return <MultiBreedView breedsToDisplay={ breeds } />;
+            if (allBreeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
+            return <MultiBreedView breedsToDisplay={ allBreeds } />;
           }} />
           
           <Route exact path="/login" 
@@ -135,19 +130,19 @@ class MainView extends React.Component {
           <Route exact path="/profile" 
             render={({ history }) => {
               if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-              if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
+              if (allBreeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <ProfileView 
-                onLoggedOut={ this.onLoggedOut }
-                onBackClick={ ()=> history.goBack() } 
+                onLoggedOut={ () => this.onLoggedOut() }
+                onBackClick={ () => history.goBack() } 
               />;
           }} />
 
           <Route path="/breeds/:breedName" 
             render={({ match, history }) => {
               if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-              if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
+              if (allBreeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <BreedView 
-                breed={ breeds.find(b => b.breed === match.params.breedName) } 
+                breed={ allBreeds.find(b => b.breed === match.params.breedName) } 
                 onBackClick={ () => history.goBack() } 
               />;
           }} />
@@ -155,7 +150,7 @@ class MainView extends React.Component {
           <Route path="/apaclass/:apaClass" 
             render={({ match, history }) => {
               if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-              if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
+              if (allBreeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <ClassView 
                 apaClass={ match.params.apaClass } 
                 onBackClick={ () => history.goBack() } 
@@ -165,12 +160,9 @@ class MainView extends React.Component {
           <Route path="/purpose/:purpose" 
             render={({ match, history }) => {
               if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-              if (breeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
+              if (allBreeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <PurposeView 
                 purpose={ match.params.purpose } 
-                breeds={ breeds }
-                token={ user.token }
-                userFavorites={ user.favorites } 
                 onBackClick={ ()=> history.goBack() } 
               />;
           }} />
@@ -183,7 +175,7 @@ class MainView extends React.Component {
 
 const mapStateToProps = state => {
   return { 
-    breeds: state.breeds,
+    allBreeds: state.breeds,
     user: state.user,
   }
 }
@@ -197,3 +189,8 @@ const actionCreators = {
 }
 
 export default connect(mapStateToProps, actionCreators)(MainView);
+
+MainView.propTypes = {
+  allBreeds: PropTypes.array.isRequired,
+  user: PropTypes.object.isRequired
+};

@@ -13,7 +13,7 @@ const filledInStarIcon = '\u2605';
 const outlineStarIcon = '\u2606';
 
 // Props: breed is from parent, rest from redux connect()
-export function FavoritesToggle({ breed, userFavorites, userToken, setUserFavorites })  {
+function FavoritesToggle({ breed, userFavorites, userToken, setUserFavorites })  {
   const [isHovered, setIsHovered] = useState(false)
 
   // is this breed in the users favorites array? true or false
@@ -28,8 +28,6 @@ export function FavoritesToggle({ breed, userFavorites, userToken, setUserFavori
   }
   
   let isFavoriteIcon = isAFavoriteBreed ? filledInStarIcon : outlineStarIcon;
-  let favoriteColorClass = favoriteStarColorClass();// false for not highlighted.
-
 
   let axiosConfig = {
     url: `${baseURL}/users/favorites/${breed._id}`,
@@ -88,8 +86,9 @@ const actionCreators = {
 
 export default connect(mapStateToProps, actionCreators)(FavoritesToggle);
 
-// FavoritesToggle.propTypes = {
-//   breed: PropTypes.object.isRequired,
-//   token: PropTypes.string.isRequired,
-//   isFavorite: PropTypes.bool.isRequired
-// };
+FavoritesToggle.propTypes = {
+  breed: PropTypes.object.isRequired,
+  userToken: PropTypes.string.isRequired,
+  userFavorites: PropTypes.array.isRequired,
+  setUserFavorites: PropTypes.func.isRequired
+};

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Col, Row, Form, Button, Card } from 'react-bootstrap';
+import { Col, Form, Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 // Custom components
@@ -21,7 +21,7 @@ const loginFieldState = {
   required: true,
 }
 
-export function LoginView({ onLoggedIn }) {
+export default function LoginView({ onLoggedIn }) {
   const [ loginState, setLoginState ] = useState({
     email: {
       ...loginFieldState, 
@@ -106,7 +106,6 @@ export function LoginView({ onLoggedIn }) {
   const renderPasswordValidationError = loginState.password.valid ? "" : <ErrorValidationLabel labelTxt={loginState.password.requiredTxt} htmlFor="password"/>;
 
   return (
-    // <Row className="justify-content-md-center">
       <Col md={10} lg={8}>
         <Card>
           <Card.Header as="h1">
@@ -157,7 +156,6 @@ export function LoginView({ onLoggedIn }) {
           </Card.Body>
         </Card>
       </Col>
-    // </Row>
   );
 }
 

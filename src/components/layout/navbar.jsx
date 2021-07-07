@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Col, Nav, Navbar, NavDropdown, Row } from 'react-bootstrap';
 
-export function ChickenNavbar({ logout }){
+export default function ChickenNavbar({ logout }){
   return (
     <Row>
       <Col>

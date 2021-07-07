@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 // import PropTypes from 'prop-types';
 
 // Bootstrap
-import { Form, Button, Row, Col, Card } from 'react-bootstrap';
+import { Form, Button, Col, Card } from 'react-bootstrap';
 
 // Custom Components
 import ErrorValidationLabel from '../helperComponents/form-error';
@@ -24,7 +24,7 @@ const defaultFieldState = {
   errMsg: "",
 }
 
-export function RegistrationView() {
+export default function RegistrationView() {
   const [ registrationState, setRegistrationState ] = useState({
     username: {
       ...defaultFieldState,
@@ -178,7 +178,6 @@ export function RegistrationView() {
   const renderPasswordValidationError = registrationState.password.valid ? "" : <ErrorValidationLabel labelTxt={validationErrorsMsg('password')} htmlFor="password"/>;;
 
   return (
-    // <Row className="justify-content-md-center">
       <Col md={10} lg={8} >
         <Card>
           <Card.Header>
@@ -248,7 +247,6 @@ export function RegistrationView() {
           </Card.Body>
         </Card>
       </Col>
-    // </Row>
   );
 }
 

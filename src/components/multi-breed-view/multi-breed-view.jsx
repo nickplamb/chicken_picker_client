@@ -4,9 +4,8 @@ import { connect } from 'react-redux'
 
 import { Col } from 'react-bootstrap'
 
-import { BreedCard } from '../breed-card/breed-card';
+import BreedCard from '../breed-card/breed-card';
 import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-input';
-import { FavoritesToggle } from '../favorites-toggle/favorites-toggle';
 
 // Props: Breeds passed from parent, visibilityFilter from store
 function MultiBreedView({ breedsToDisplay, visibilityFilter }) {
@@ -42,8 +41,7 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps)(MultiBreedView);
 
-// MultiBreedView.propTypes = {
-//   breeds: PropTypes.array.isRequired,
-//   token: PropTypes.string.isRequired,
-//   favoriteBreeds: PropTypes.array.isRequired
-// };
+MultiBreedView.propTypes = {
+  breedsToDisplay: PropTypes.array.isRequired,
+  visibilityFilter: PropTypes.string.isRequired,
+};

@@ -9,7 +9,7 @@ import './profile-view.scss';
 // Custom Components
 import ErrorValidationLabel from '../helperComponents/form-error';
 import MultiBreedView from '../multi-breed-view/multi-breed-view';
-import { ColoredLine } from '../helperComponents/colored-line';
+import ColoredLine from '../helperComponents/colored-line';
 
 const Frankie =  require('url:../../../assets/frankie2.jpeg');
 
@@ -28,7 +28,7 @@ const defaultFieldState = {
 }
 
 // onLoggedOut and onBackClick from parent, rest from state
-export function ProfileView({ onLoggedOut, onBackClick, user, userToken, userFavorites }) {
+function ProfileView({ onLoggedOut, onBackClick, user, userToken, userFavorites }) {
 
   const [showModal, setShowModal] = useState(false);
   const [ registrationState, setRegistrationState ] = useState({
@@ -197,7 +197,7 @@ export function ProfileView({ onLoggedOut, onBackClick, user, userToken, userFav
       const data = res.data;
       console.log(data);
       onLoggedOut();
-      window.open('/login', '_self');
+      // window.open('/login', '_self');
     })
     .catch(e => {
       console.log(e);
@@ -334,10 +334,10 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps)(ProfileView);
 
-// ProfileView.propTypes = {
-//   user: PropTypes.object.isRequired,
-//   userToken: PropTypes.string.isRequired,
-//   userFavorites: PropTypes.array.isRequired,
-//   onLoggedOut: PropTypes.func.isRequired,
-//   onBackClick: PropTypes.func.isRequired
-// };
+ProfileView.propTypes = {
+  user: PropTypes.object.isRequired,
+  userToken: PropTypes.string.isRequired,
+  userFavorites: PropTypes.array.isRequired,
+  onLoggedOut: PropTypes.func.isRequired,
+  onBackClick: PropTypes.func.isRequired
+};

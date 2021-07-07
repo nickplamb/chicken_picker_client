@@ -8,12 +8,11 @@ import { connect } from 'react-redux';
 // import './class-view.scss';
 
 import MultiBreedView from '../multi-breed-view/multi-breed-view';
-import { ColoredLine } from '../helperComponents/colored-line';
+import ColoredLine from '../helperComponents/colored-line';
 import Frankie from 'url:../../../assets/frankie2.jpeg';
-// const Frankie =  require('url:../../../assets/frankie2.jpeg');
 
 // apaClass and onBackClick from parent, rest from state.
-export function ClassView({ apaClass, onBackClick, allBreeds}) {
+function ClassView({ apaClass, onBackClick, allBreeds}) {
 
   // Need to put these in DB
   const classDescriptions = {

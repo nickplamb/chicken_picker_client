@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Col } from 'react-bootstrap';
-import { indexOf, split, truncate } from 'lodash'
+import { split } from 'lodash'
+import { Link } from 'react-router-dom';
 
 // Styling
 import './breed-view.scss';
-import { Link } from 'react-router-dom';
 
 const Frankie =  require('url:../../../assets/frankie2.jpeg');
 
-export class BreedView extends React.Component {
-
+export default class BreedView extends React.Component {
 
   render() {
     // a single breed is sent from main-view
@@ -20,7 +19,6 @@ export class BreedView extends React.Component {
     const isDualPurpose =  (purposeArray) => {
       return (purposeArray.indexOf('meat') > -1 && purposeArray.indexOf('eggs') > -1 );
     }
-
 
     const breedsPurpose = isDualPurpose(purposeArray) ? ["Dual-purpose"] : purposeArray;
 

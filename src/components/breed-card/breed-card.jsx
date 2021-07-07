@@ -6,12 +6,11 @@ import { Link } from 'react-router-dom';
 
 import FavoritesToggle from '../favorites-toggle/favorites-toggle';
 import Frankie from 'url:../../../assets/frankie2.jpeg';
-// const Frankie = require('url:../../../assets/frankie2.jpeg');
 
 // Styling
 import './breed-card.scss';
 
-export function BreedCard({ breed }) {
+export default function BreedCard({ breed }) {
 
   return (
     <Card>
@@ -42,9 +41,4 @@ BreedCard.propTypes = {
     eggColor: PropTypes.string.isRequired,
     eggSize: PropTypes.string
   }).isRequired,
-  // favoritesToggle: PropTypes.element.isRequired
-  // isFavorite: PropTypes.bool.isRequired,
-  // token: PropTypes.string.isRequired,
-  // favoritesArray: PropTypes.array,
-  // onFavoritesToggle: PropTypes.func.isRequired
 };

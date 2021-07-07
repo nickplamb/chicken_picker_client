@@ -1,19 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Col } from 'react-bootstrap';
-import { upperFirst, toLower, split } from 'lodash';
+import { upperFirst, split } from 'lodash';
 import { connect } from 'react-redux';
 
 // Styling
 // import './class-view.scss';
 
 import MultiBreedView from '../multi-breed-view/multi-breed-view';
-import { ColoredLine } from '../helperComponents/colored-line';
+import ColoredLine from '../helperComponents/colored-line';
 import Frankie from 'url:../../../assets/frankie2.jpeg';
-// const Frankie =  require('url:../../../assets/frankie2.jpeg');
 
 // purpose and onBackClick from parent, rest from state
-export function PurposeView({ purpose, onBackClick, allBreeds }) {
+function PurposeView({ purpose, onBackClick, allBreeds }) {
 
   const purposeDescriptions = {
     "Eggs": "These breeds are used primarily for egg production. The egg layer is leaner and rangier in body type. It will lay more eggs, as a general rule.",
@@ -25,15 +24,6 @@ export function PurposeView({ purpose, onBackClick, allBreeds }) {
     "Broody hens": "These breeds produce particularly good hens for brooding and raising chicks.",
     "Dual-purpose": "The dual purpose chicken is intended to grow a good body, adequate for putting meat on the table, and lay a nice quantity of eggs. The dual purpose chicken will not provide as large a carcass as a meat bird, nor lay as many eggs as an egg layer."
   };
-
-  // returns true if purpose 
-  // const isDualPurpose =  (purposeArray) => {
-  //   return (purposeArray.indexOf('meat') > -1 && purposeArray.indexOf('eggs') > -1 );
-  // }
-
-  // const purposeArray = split(breed.purpose, ', ');
-  // // convert purpose to Dual-purpose
-  // const breedsPurpose = isDualPurpose(purposeArray) ? "Dual-purpose" : breed.purpose;
 
   const displayPurpose = upperFirst(purpose)
 
