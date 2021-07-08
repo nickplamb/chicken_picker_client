@@ -106,9 +106,7 @@ export default function LoginView({ onLoggedIn }) {
   };
 
   function handleEmailErrorText() {
-    if (loginState.email.valid && !status400Returned) {
-      return '';
-    }
+    if (loginState.email.valid && !status400Returned) return "";
 
     let errorLabelText =  loginState.email.requiredTxt;
 
@@ -127,7 +125,6 @@ export default function LoginView({ onLoggedIn }) {
   const renderEmailValidationError = handleEmailErrorText()
 
   const renderPasswordValidationError = loginState.password.valid ? "" : <ErrorValidationLabel labelTxt={loginState.password.requiredTxt} htmlFor="password"/>;
-  // const renderStatus400Error = 
 
   return (
       <Col md={10} lg={8}>

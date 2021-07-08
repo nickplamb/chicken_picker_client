@@ -105,11 +105,11 @@ class MainView extends React.Component {
 
     return (
       <Router>
-        <ChickenNavbar logout={() => {this.onLoggedOut()}}/> 
+        <ChickenNavbar logout={ () => this.onLoggedOut() }/> 
         <Row className="main-view justify-content-sm-center mt-1">
           
-          <Route exact path="/" render={() => {
-            if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+          <Route exact path="/" render={ () => {
+            if (!user.userEmail) return <LoginView onLoggedIn={ user => this.onLoggedIn(user) } />;
             if (allBreeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
             return <MultiBreedView breedsToDisplay={ allBreeds } />;
           }} />
@@ -122,14 +122,14 @@ class MainView extends React.Component {
             }
           />
           
-          <Route exact path="/register" render={() => {
+          <Route exact path="/register" render={ () => {
             if (user.userEmail) return <Redirect to="/" />;
-            return <RegistrationView />;
+            return <RegistrationView onLoggedIn={ user => this.onLoggedIn(user) } />;
           }} />
           
           <Route exact path="/profile" 
             render={({ history }) => {
-              if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              if (!user.userEmail) return <LoginView onLoggedIn={ user => this.onLoggedIn(user) } />;
               if (allBreeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <ProfileView 
                 onLoggedOut={ () => this.onLoggedOut() }
@@ -139,7 +139,7 @@ class MainView extends React.Component {
 
           <Route path="/breeds/:breedName" 
             render={({ match, history }) => {
-              if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              if (!user.userEmail) return <LoginView onLoggedIn={ user => this.onLoggedIn(user) } />;
               if (allBreeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <BreedView 
                 breed={ allBreeds.find(b => b.breed === match.params.breedName) } 
@@ -149,7 +149,7 @@ class MainView extends React.Component {
            
           <Route path="/apaclass/:apaClass" 
             render={({ match, history }) => {
-              if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              if (!user.userEmail) return <LoginView onLoggedIn={ user => this.onLoggedIn(user) } />;
               if (allBreeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <ClassView 
                 apaClass={ match.params.apaClass } 
@@ -159,7 +159,7 @@ class MainView extends React.Component {
 
           <Route path="/purpose/:purpose" 
             render={({ match, history }) => {
-              if (!user.userEmail) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+              if (!user.userEmail) return <LoginView onLoggedIn={ user => this.onLoggedIn(user) } />;
               if (allBreeds.length === 0) return <div className='main-view'><h1>Loading...</h1></div>;
               return <PurposeView 
                 purpose={ match.params.purpose } 
