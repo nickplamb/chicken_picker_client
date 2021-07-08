@@ -27,15 +27,16 @@ export default function LoginView({ onLoggedIn }) {
       ...loginFieldState, 
       fieldName: 'email', 
       requiredTxt: 'Email is required',
-      formatErrorTxt: 'Incorrect email format',
+      formatErrorTxt: 'Incorrect Email Format',
     },
     password: {
       ...loginFieldState,
       fieldName: 'password', 
-      requiredTxt: 'Password is required'
+      requiredTxt: 'Password is Required'
     },
     allFieldsValid: false,
   });
+  const [status400Returned, setStatus400Returned] = useState(false)
 
   //Login validation
   reduceFormValues = formElements => {
@@ -81,6 +82,7 @@ export default function LoginView({ onLoggedIn }) {
     const form = e.target;
     const formValues = reduceFormValues(form.elements);
     const allFieldsValid = checkAllFieldsValid(formValues);
+    setStatus400Returned(false);
 
     // Send request to server for auth only if all fields are valid.
     if (allFieldsValid) {
@@ -94,16 +96,38 @@ export default function LoginView({ onLoggedIn }) {
         onLoggedIn(data);
       })
       .catch(err => {
-        console.log(`${err}: no such user`)
+        if (err.response.status === 400) { 
+          setStatus400Returned(true);
+        }
       }); 
     }
 
     setLoginState({ ...formValues, allFieldsValid }); //we set the state based on the extracted values from Constraint Validation API
   };
 
+  function handleEmailErrorText() {
+    if (loginState.email.valid && !status400Returned) {
+      return '';
+    }
+
+    let errorLabelText =  loginState.email.requiredTxt;
+
+    if (loginState.email.typeMismatch) {
+      errorLabelText = loginState.email.formatErrorTxt
+    }
+
+    if (status400Returned) {
+      errorLabelText = 'Incorrect Email or Password'
+    }
+
+    return <ErrorValidationLabel labelTxt={ errorLabelText } htmlFor="email"/>;
+  }
+
   // display error msg based on valid property in state.
-  const renderEmailValidationError = loginState.email.valid ? "" : <ErrorValidationLabel labelTxt={loginState.email.typeMismatch ? loginState.email.formatErrorTxt : loginState.email.requiredTxt} htmlFor="email"/>;
+  const renderEmailValidationError = handleEmailErrorText()
+
   const renderPasswordValidationError = loginState.password.valid ? "" : <ErrorValidationLabel labelTxt={loginState.password.requiredTxt} htmlFor="password"/>;
+  // const renderStatus400Error = 
 
   return (
       <Col md={10} lg={8}>
