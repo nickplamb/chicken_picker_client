@@ -2,7 +2,8 @@ import { combineReducers } from "redux";
 
 import { 
   SET_BREEDS, 
-  SET_FILTER, 
+  SET_FILTER,
+  SET_SORT_ORDER,
   SET_USER, 
   SET_TOKEN, 
   SET_USER_FAVORITES,
@@ -12,6 +13,17 @@ import {
 function visibilityFilter (state = '', action) {
   switch (action.type) {
     case SET_FILTER:
+      return action.value;
+    case USER_LOGOUT:
+      return '';
+    default:
+      return state;
+  }
+}
+
+function sortOrder (state='', action) {
+  switch (action.type) {
+    case SET_SORT_ORDER:
       return action.value;
     case USER_LOGOUT:
       return '';
@@ -82,6 +94,7 @@ function user(state = {}, action) {
 // using combinedReducers function
 const breedsApp = combineReducers({
   visibilityFilter,
+  sortOrder,
   breeds,
   user
 })
