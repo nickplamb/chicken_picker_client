@@ -16,6 +16,11 @@ const outlineStarIcon = '\u2606';
 function FavoritesToggle({ breed, userFavorites, userToken, setUserFavorites })  {
   const [isHovered, setIsHovered] = useState(false)
 
+  // protect from component throwing an error if userFavorites has not been set in state yet.
+  if (!userFavorites) {
+    return <span> </span>
+  }
+  
   // is this breed in the users favorites array? true or false
   const isAFavoriteBreed = (userFavorites.map(favoriteBreed => favoriteBreed._id).indexOf(breed._id)) > -1 ? true : false;
 
@@ -57,15 +62,12 @@ function FavoritesToggle({ breed, userFavorites, userToken, setUserFavorites }) 
       })
   }
 
-  if (!userFavorites) return <span> ?? </span>
   return (
     <span 
       className={`toggle-star ${favoriteStarColorClass()}`}
       id={`${breed.breed}-toggle-star`}
       onMouseEnter={toggleHover}
       onMouseLeave={toggleHover}
-      // onMouseOver={onHover}
-      // onMouseOut={onNotHover}
       onClick={onClick}
     >
       {isFavoriteIcon}
@@ -89,6 +91,6 @@ export default connect(mapStateToProps, actionCreators)(FavoritesToggle);
 FavoritesToggle.propTypes = {
   breed: PropTypes.object.isRequired,
   userToken: PropTypes.string.isRequired,
-  userFavorites: PropTypes.array.isRequired,
+  userFavorites: PropTypes.array,
   setUserFavorites: PropTypes.func.isRequired
 };
