@@ -95,7 +95,6 @@ class MainView extends React.Component {
     localStorage.removeItem('userEmail');
     localStorage.removeItem('username');
 
-    console.log(this)
     this.props.userLogout();
     window.open('/login', '_self');
   }
@@ -180,7 +179,7 @@ const mapStateToProps = state => {
   }
 }
 
-const actionCreators = {
+const mapDispatchToProps = {
   setBreeds,
   setToken,
   setUser,
@@ -188,9 +187,14 @@ const actionCreators = {
   userLogout
 }
 
-export default connect(mapStateToProps, actionCreators)(MainView);
+export default connect(mapStateToProps, mapDispatchToProps)(MainView);
 
 MainView.propTypes = {
   allBreeds: PropTypes.array.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  setBreeds: PropTypes.func.isRequired,
+  setToken: PropTypes.func.isRequired,
+  setUser: PropTypes.func.isRequired,
+  setUserFavorites: PropTypes.func.isRequired,
+  userLogout: PropTypes.func.isRequired
 };

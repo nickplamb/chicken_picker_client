@@ -123,9 +123,7 @@ export default function RegistrationView({ onLoggedIn }) {
       .then(res => {
         const data = res.data;
         // console.log(data);
-        window.open('/', '_self');
-        // onRegistration(data);
-
+        window.open('/login', '_self');
         // onLoggedIn(data)
       })
       .catch(err => {
