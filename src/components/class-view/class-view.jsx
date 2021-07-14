@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import MultiBreedView from '../multi-breed-view/multi-breed-view';
 import ColoredLine from '../helperComponents/colored-line';
 import Frankie from 'url:../../../assets/frankie2.jpeg';
+// import { breedImages } from '../breed-images'
 
 // apaClass and onBackClick from parent, rest from state.
 function ClassView({ apaClass, onBackClick, allBreeds}) {
@@ -26,6 +27,9 @@ function ClassView({ apaClass, onBackClick, allBreeds}) {
   };
 
   const displayClass = upperFirst(apaClass)
+
+  // const breedNameConverted = breed.breed.replace(/\s+/g, '').toLowerCase();
+  // const breedImage = breedImages[breedNameConverted] ? breedImages[breedNameConverted] : Frankie;
 
   return (
     <>

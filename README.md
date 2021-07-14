@@ -9,6 +9,7 @@ Users can also add and remove breeds from their favorites list as well as search
 This is just a front end made to connect to a custom REST API located [here.](https://github.com/nickplamb/Chickens_api)
 
 This app was created using:
+
 * React
 * React-Bootstrap
 * React-Redux
