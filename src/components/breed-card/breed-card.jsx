@@ -4,18 +4,20 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 
-import { FavoritesToggle } from '../favorites-toggle/favorites-toggle';
-import Frankie from 'url:../../../assets/frankie2.jpeg';
-// const Frankie = require('url:../../../assets/frankie2.jpeg');
+import FavoritesToggle from '../favorites-toggle/favorites-toggle';
+import Frankie from 'url:../../../assets/breed_photos/frankie2.jpeg';
+import { breedImages } from '../breed-images'
 
 // Styling
 import './breed-card.scss';
 
-export function BreedCard({ breed, favoritesToggle }) {
-
+export default function BreedCard({ breed }) {
+  const breedNameConverted = breed.breed.replace(/\s+/g, '').toLowerCase();
+  const breedImage = breedImages[breedNameConverted] ? breedImages[breedNameConverted] : Frankie;
+  
   return (
     <Card>
-      <Card.Img variant="top" src={Frankie} />
+      <Card.Img variant="top" src={ breedImage } />
       <Card.Body>
         <Card.Title>{breed.breed}</Card.Title>
         <Card.Text as="div">
@@ -29,7 +31,7 @@ export function BreedCard({ breed, favoritesToggle }) {
         <Link to={`/breeds/${breed.breed}`}>
           <Button >Open</Button> {/* variant="link" */}
         </Link>
-        { favoritesToggle }
+        <FavoritesToggle breed={breed} />
       </Card.Body>
     </Card>
   )
@@ -42,9 +44,4 @@ BreedCard.propTypes = {
     eggColor: PropTypes.string.isRequired,
     eggSize: PropTypes.string
   }).isRequired,
-  favoritesToggle: PropTypes.element.isRequired
-  // isFavorite: PropTypes.bool.isRequired,
-  // token: PropTypes.string.isRequired,
-  // favoritesArray: PropTypes.array,
-  // onFavoritesToggle: PropTypes.func.isRequired
 };

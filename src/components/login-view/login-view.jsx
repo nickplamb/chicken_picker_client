@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Col, Row, Form, Button, Card } from 'react-bootstrap';
+import { Col, Form, Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 // Custom components
@@ -21,21 +21,22 @@ const loginFieldState = {
   required: true,
 }
 
-export function LoginView({ onLoggedIn }) {
+export default function LoginView({ onLoggedIn }) {
   const [ loginState, setLoginState ] = useState({
     email: {
       ...loginFieldState, 
       fieldName: 'email', 
       requiredTxt: 'Email is required',
-      formatErrorTxt: 'Incorrect email format',
+      formatErrorTxt: 'Incorrect Email Format',
     },
     password: {
       ...loginFieldState,
       fieldName: 'password', 
-      requiredTxt: 'Password is required'
+      requiredTxt: 'Password is Required'
     },
     allFieldsValid: false,
   });
+  const [status400Returned, setStatus400Returned] = useState(false)
 
   //Login validation
   reduceFormValues = formElements => {
@@ -81,6 +82,7 @@ export function LoginView({ onLoggedIn }) {
     const form = e.target;
     const formValues = reduceFormValues(form.elements);
     const allFieldsValid = checkAllFieldsValid(formValues);
+    setStatus400Returned(false);
 
     // Send request to server for auth only if all fields are valid.
     if (allFieldsValid) {
@@ -90,27 +92,41 @@ export function LoginView({ onLoggedIn }) {
       })
       .then(res => {
         const data = res.data;
+        // console.log(data);
         onLoggedIn(data);
       })
       .catch(err => {
-        console.log(`${err}: no such user`)
+        if (err.response.status === 400) { 
+          setStatus400Returned(true);
+        }
       }); 
     }
 
     setLoginState({ ...formValues, allFieldsValid }); //we set the state based on the extracted values from Constraint Validation API
   };
 
-  // display error msg based on valid property in state.
-  const renderEmailValidationError = loginState.email.valid ? "" : <ErrorValidationLabel labelTxt={loginState.email.typeMismatch ? loginState.email.formatErrorTxt : loginState.email.requiredTxt} htmlFor="email"/>;
-  const renderPasswordValidationError = loginState.password.valid ? "" : <ErrorValidationLabel labelTxt={loginState.password.requiredTxt} htmlFor="password"/>;
+  function handleEmailErrorText() {
+    if (loginState.email.valid && !status400Returned) return "";
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-    onGoRegister();
+    let errorLabelText =  loginState.email.requiredTxt;
+
+    if (loginState.email.typeMismatch) {
+      errorLabelText = loginState.email.formatErrorTxt
+    }
+
+    if (status400Returned) {
+      errorLabelText = 'Incorrect Email or Password'
+    }
+
+    return <ErrorValidationLabel labelTxt={ errorLabelText } htmlFor="email"/>;
   }
 
+  // display error msg based on valid property in state.
+  const renderEmailValidationError = handleEmailErrorText()
+
+  const renderPasswordValidationError = loginState.password.valid ? "" : <ErrorValidationLabel labelTxt={loginState.password.requiredTxt} htmlFor="password"/>;
+
   return (
-    // <Row className="justify-content-md-center">
       <Col md={10} lg={8}>
         <Card>
           <Card.Header as="h1">
@@ -161,11 +177,9 @@ export function LoginView({ onLoggedIn }) {
           </Card.Body>
         </Card>
       </Col>
-    // </Row>
   );
 }
 
 LoginView.propTypes = {
-  // onGoRegister: PropTypes.func.isRequired,
   onLoggedIn: PropTypes.func.isRequired,
 };

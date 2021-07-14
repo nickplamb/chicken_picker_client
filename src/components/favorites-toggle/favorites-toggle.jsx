@@ -1,64 +1,73 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+import { setUserFavorites } from '../../actions/actions';
 
 import './favorites-toggle.scss'
 
 const baseURL = 'https://chickens-api.herokuapp.com';
 
-export function FavoritesToggle({ breed, isFavorite, token, favoritesArray, onFavoritesToggle})  {
-  const [favorite, setFavorite] = useState(isFavorite);
-  const [isFavoriteIcon, setIsFavoriteIcon] = useState(isFavorite ? '\u2605' : '\u2606');
+const filledInStarIcon = '\u2605';
+const outlineStarIcon = '\u2606';
+
+// Props: breed is from parent, rest from redux connect()
+function FavoritesToggle({ breed, userFavorites, userToken, setUserFavorites })  {
+  const [isHovered, setIsHovered] = useState(false)
+
+  // protect from component throwing an error if userFavorites has not been set in state yet.
+  if (!userFavorites) {
+    return <span> </span>
+  }
   
+  // is this breed in the users favorites array? true or false
+  const isAFavoriteBreed = (userFavorites.map(favoriteBreed => favoriteBreed._id).indexOf(breed._id)) > -1 ? true : false;
+
+  // two state, grey or gold. if is a favorite then it starts gold and highlights grey and vice versa
+  const favoriteStarColorClass = () => {
+    if ((isHovered &&  isAFavoriteBreed) || (!isHovered && !isAFavoriteBreed)) return 'toggle-Star__grey';
+    if ((isHovered && !isAFavoriteBreed) || (!isHovered &&  isAFavoriteBreed)) return 'toggle-Star__gold';
+
+    // (isAFavoriteBreed ? 1 :0) ^ (isHighlighted ? 1 : 0)
+  }
+  
+  let isFavoriteIcon = isAFavoriteBreed ? filledInStarIcon : outlineStarIcon;
+
   let axiosConfig = {
     url: `${baseURL}/users/favorites/${breed._id}`,
-    headers:  {Authorization: `Bearer ${token}`}
+    headers:  {Authorization: `Bearer ${userToken}`}
   }
 
-  const onHover = e => {
-    const star = e.target;
-    if (!favorite) star.style.color = 'yellow';
-  }
+  // https://stackoverflow.com/questions/44575727/react-js-toggle-adding-a-class-on-hover
+  const toggleHover = () => setIsHovered(() => !isHovered);
 
-  const onNotHover = e => {
-    const star = e.target;
-    if (!favorite) star.style.color = 'grey';
-  }
-  
   const onClick = e => {
-    if (!favorite) {
+    if (!isAFavoriteBreed) {
       axiosConfig.method = 'post';
-      onFavoritesToggle([...favoritesArray, breed]) 
+      // onFavoritesToggle([...favoritesArray, breed]) 
     }
 
-    if (favorite) {
+    if (isAFavoriteBreed) {
       axiosConfig.method = 'delete';
-      onFavoritesToggle(favoritesArray.filter(item => item._id !== breed._id))
+      // onFavoritesToggle(favoritesArray.filter(item => item._id !== breed._id))
     }
-    
+
     axios(axiosConfig)
       .then(res => {
-        setFavorite(() => !favorite)
-        console.log(res);
+        setUserFavorites(res.data);
       })
-      .catch(e => {
-        console.log(e);
+      .catch(err => {
+        console.log(err);
       })
   }
-
-  useEffect(() => {
-    const star = document.getElementById(`${breed.breed}-toggle-star`);
-    favorite ? setIsFavoriteIcon('\u2605') : setIsFavoriteIcon('\u2606');
-    star.style.color = (favorite ? 'yellow' : 'grey');
-  }, [favorite])
-
 
   return (
     <span 
-      className="toggle-star"
+      className={`toggle-star ${favoriteStarColorClass()}`}
       id={`${breed.breed}-toggle-star`}
-      onMouseOver={onHover}
-      onMouseOut={onNotHover}
+      onMouseEnter={toggleHover}
+      onMouseLeave={toggleHover}
       onClick={onClick}
     >
       {isFavoriteIcon}
@@ -66,8 +75,22 @@ export function FavoritesToggle({ breed, isFavorite, token, favoritesArray, onFa
   )
 }
 
+const mapStateToProps = state => {
+  return { 
+    userToken: state.user.token,
+    userFavorites: state.user.favorites
+  }
+};
+
+const actionCreators = {
+  setUserFavorites
+};
+
+export default connect(mapStateToProps, actionCreators)(FavoritesToggle);
+
 FavoritesToggle.propTypes = {
   breed: PropTypes.object.isRequired,
-  token: PropTypes.string.isRequired,
-  isFavorite: PropTypes.bool.isRequired
+  userToken: PropTypes.string.isRequired,
+  userFavorites: PropTypes.array,
+  setUserFavorites: PropTypes.func.isRequired
 };

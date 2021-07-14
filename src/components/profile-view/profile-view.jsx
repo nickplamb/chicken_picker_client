@@ -1,14 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { Col, Image, Form, Button, Modal} from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Col, Form, Button, Modal} from 'react-bootstrap';
 
 import './profile-view.scss';
 
 // Custom Components
 import ErrorValidationLabel from '../helperComponents/form-error';
 import MultiBreedView from '../multi-breed-view/multi-breed-view';
-import { ColoredLine } from '../helperComponents/colored-line';
+import ColoredLine from '../helperComponents/colored-line';
 
 const Frankie =  require('url:../../../assets/frankie2.jpeg');
 
@@ -16,6 +17,7 @@ const baseURL = 'https://chickens-api.herokuapp.com';
 
 // state fields that are not unique.
 const defaultFieldState = {
+
   value: "",
   valid: true,
   typeMismatch: false,
@@ -25,7 +27,8 @@ const defaultFieldState = {
   errMsg: "",
 }
 
-export function ProfileView({ username, userEmail, token, userFavorites, onLoggedOut, onBackClick }) {
+// onLoggedOut and onBackClick from parent, rest from state
+function ProfileView({ onLoggedOut, onBackClick, user, userToken, userFavorites }) {
 
   const [showModal, setShowModal] = useState(false);
   const [ registrationState, setRegistrationState ] = useState({
@@ -116,7 +119,7 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
       formValues.username.value && (data.username = formValues.username.value);
 
       axios.put(`${baseURL}/users`, data , {
-        headers: {Authorization: `Bearer ${token}`}
+        headers: {Authorization: `Bearer ${userToken}`}
       })
       .then(res => {
         const data = res.data;
@@ -188,13 +191,13 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
     handleCloseModal();
 
     axios.delete(`${baseURL}/users`, {
-      headers: {Authorization: `Bearer ${token}`}
+      headers: {Authorization: `Bearer ${userToken}`}
     })
     .then(res => {
       const data = res.data;
       console.log(data);
       onLoggedOut();
-      window.open('/login', '_self');
+      // window.open('/login', '_self');
     })
     .catch(e => {
       console.log(e);
@@ -206,7 +209,7 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
   return (
     <>
       <Col xs={12}>
-        <h1>Hello {username}!</h1>
+        <h1>Hello {user.username}!</h1>
       </Col>
       <Col md={6}>
         <Form 
@@ -222,7 +225,7 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
                 <Form.Control 
                   type="text" 
                   name="username"
-                  placeholder={username}
+                  placeholder={user.username}
                   pattern="[\w\d]*"
                   minLength="5"
                   autoComplete="off"
@@ -291,7 +294,7 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
       <Col xs={12}>
         <h3>Your Favorite Breeds</h3>
       </Col>
-      <MultiBreedView breeds={ userFavorites } token={ token } favoriteBreeds={ userFavorites }/>
+      <MultiBreedView breedsToDisplay={ userFavorites } />
 
       <Modal 
         show={showModal}
@@ -321,10 +324,19 @@ export function ProfileView({ username, userEmail, token, userFavorites, onLogge
   )
 }
 
+const mapStateToProps = state => {
+  return { 
+    userToken: state.user.token,
+    user: state.user,
+    userFavorites: state.user.favorites
+  }
+};
+
+export default connect(mapStateToProps)(ProfileView);
+
 ProfileView.propTypes = {
-  username: PropTypes.string.isRequired,
-  userEmail: PropTypes.string.isRequired,
-  token: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
+  userToken: PropTypes.string.isRequired,
   userFavorites: PropTypes.array.isRequired,
   onLoggedOut: PropTypes.func.isRequired,
   onBackClick: PropTypes.func.isRequired

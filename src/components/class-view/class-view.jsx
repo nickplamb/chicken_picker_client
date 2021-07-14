@@ -2,17 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Col } from 'react-bootstrap';
 import { upperFirst, toLower } from 'lodash';
+import { connect } from 'react-redux';
 
 // Styling
 // import './class-view.scss';
 
 import MultiBreedView from '../multi-breed-view/multi-breed-view';
-import { ColoredLine } from '../helperComponents/colored-line';
+import ColoredLine from '../helperComponents/colored-line';
 import Frankie from 'url:../../../assets/frankie2.jpeg';
-// const Frankie =  require('url:../../../assets/frankie2.jpeg');
+// import { breedImages } from '../breed-images'
 
-export function ClassView({ breeds, apaClass, onBackClick, token, userFavorites }) {
+// apaClass and onBackClick from parent, rest from state.
+function ClassView({ apaClass, onBackClick, allBreeds}) {
 
+  // Need to put these in DB
   const classDescriptions = {
     "American": "The American Class contains thirteen breeds which originated in Canada or the United States. All are heavy breeds, and most lay brown eggs; most are cold-hardy",
     "Asiatic": "These three breeds originate in China; they are large, feather legged, and lay brown eggs.",
@@ -24,6 +27,9 @@ export function ClassView({ breeds, apaClass, onBackClick, token, userFavorites 
   };
 
   const displayClass = upperFirst(apaClass)
+
+  // const breedNameConverted = breed.breed.replace(/\s+/g, '').toLowerCase();
+  // const breedImage = breedImages[breedNameConverted] ? breedImages[breedNameConverted] : Frankie;
 
   return (
     <>
@@ -65,13 +71,21 @@ export function ClassView({ breeds, apaClass, onBackClick, token, userFavorites 
         </h3>
       </Col>
 
-      <MultiBreedView breeds={ breeds.filter(breed => (toLower(breed.apaClass.name) === toLower(apaClass))) } token={ token } favoriteBreeds={ userFavorites } />
+      <MultiBreedView breedsToDisplay={ allBreeds.filter(breed => (toLower(breed.apaClass.name) === toLower(apaClass))) } />
     </>
   );
 }
 
+const mapStateToProps = state => {
+  return { 
+    allBreeds: state.breeds
+  }
+};
+
+export default connect(mapStateToProps)(ClassView);
+
 ClassView.propTypes = {
-  breeds: PropTypes.array.isRequired,
+  allBreeds: PropTypes.array.isRequired,
   apaClass: PropTypes.string.isRequired,
   onBackClick: PropTypes.func.isRequired
 };

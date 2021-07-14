@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 // Bootstrap
-import { Form, Button, Row, Col, Card } from 'react-bootstrap';
+import { Form, Button, Col, Card } from 'react-bootstrap';
 
 // Custom Components
 import ErrorValidationLabel from '../helperComponents/form-error';
@@ -24,7 +24,7 @@ const defaultFieldState = {
   errMsg: "",
 }
 
-export function RegistrationView() {
+export default function RegistrationView({ onLoggedIn }) {
   const [ registrationState, setRegistrationState ] = useState({
     username: {
       ...defaultFieldState,
@@ -54,6 +54,7 @@ export function RegistrationView() {
     },
     allFieldsValid: false,
   });
+  const [status409Returned, setStatus409Returned] = useState({errorWasReturned: false, msg: ''})
 
   //Login validation
   reduceFormValues = formElements => {
@@ -106,6 +107,10 @@ export function RegistrationView() {
     const form = e.target;
     const formValues = reduceFormValues(form.elements);
     const allFieldsValid = checkAllFieldsValid(formValues);
+    setStatus409Returned({
+      ...status409Returned,
+      errorWasReturned: false
+    })
 
     // Send request to server for auth only if all fields are valid.
     if (allFieldsValid) {
@@ -117,47 +122,25 @@ export function RegistrationView() {
       })
       .then(res => {
         const data = res.data;
-        console.log('res data');
-        console.log(data);
-        window.open('/', '_self');
-        // onRegistration(data);
+        // console.log(data);
+        window.open('/login', '_self');
+        // onLoggedIn(data)
       })
       .catch(err => {
-        console.log(err.response.data); //  ADD text to setRegistrationState({})
         console.log(err);
-        // if (err.status === 409){
-        //   formValues.email.errMsg = err.response.data;
-        //   formValues.email.errMsg = false;
-        //   // setRegistrationState({
-          //   ...registrationState,
-          //   email: {
-          //     ...registrationState.email,
-          //     errMsg: err.response.data,
-          //     valid: false
-          //   }
-          // })
-        // }
+        if (err.response.status === 409) {
+          setStatus409Returned({
+            errorWasReturned: true,
+            msg: err.response.data
+          });
+        }
       }); 
     }
-        // formValues[err.params].errMsg = err.response.data;
-        // err.response.data.errors.map(error => {
-          //   console.log(error)
-          //   let errorField = error.params;
-          //   let errorMsg = error.msg;
-          //   setRegistrationState({
-          //     ...registrationState,
-          //     [errorField]: {
-          //       ...registrationState[errorField],
-          //       errMsg: errorMsg,
-          //       valid: false
-          //     }
-          //   })
-          // }) 
 
     setRegistrationState({ ...formValues, allFieldsValid }); //we set the state based on the extracted values from Constraint Validation API
   };
 
-  const validationErrorsMsg = (field) => {
+  const clientValidationErrorsMsg = (field) => {
     if (registrationState[field].errMsg) {
       console.log(registrationState[field].errMsg);
     }
@@ -167,18 +150,32 @@ export function RegistrationView() {
     if (registrationState[field].tooShort) {
       return (registrationState[field].minLengthErrorTxt);
     }
-    if (registrationState[field].patternMismatch) {
+    if (registrationState[field].patternMismatch || registrationState[field].typeMismatch) {
       return (registrationState[field].formatErrorTxt);
     }
   }
 
+  const handleEmailErrorText = (field) => {
+    // client side validation ok and no server error 409, then return empty string.
+    if (registrationState.email.valid && !status409Returned.errorWasReturned) return "";
+    
+    // populate proper client side error messages
+    let errorLabelText = clientValidationErrorsMsg(field);
+
+    // overwrite if there is a server side 409 error.
+    if (status409Returned.errorWasReturned) {
+      errorLabelText = status409Returned.msg;
+    }
+
+    return <ErrorValidationLabel labelTxt={ errorLabelText } htmlFor="email"/>;
+  }
+
   // display error msg based on valid property in state.
-  const renderUsernameValidationError = registrationState.username.valid ? "" : <ErrorValidationLabel labelTxt={validationErrorsMsg('username')} htmlFor="username"/>;
-  const renderEmailValidationError = registrationState.email.valid ? "" : <ErrorValidationLabel labelTxt={validationErrorsMsg('email')} htmlFor="email"/>;
-  const renderPasswordValidationError = registrationState.password.valid ? "" : <ErrorValidationLabel labelTxt={validationErrorsMsg('password')} htmlFor="password"/>;;
+  const renderEmailValidationError = handleEmailErrorText('email');
+  const renderUsernameValidationError = registrationState.username.valid ? "" : <ErrorValidationLabel labelTxt={clientValidationErrorsMsg('username')} htmlFor="username"/>;
+  const renderPasswordValidationError = registrationState.password.valid ? "" : <ErrorValidationLabel labelTxt={clientValidationErrorsMsg('password')} htmlFor="password"/>;;
 
   return (
-    // <Row className="justify-content-md-center">
       <Col md={10} lg={8} >
         <Card>
           <Card.Header>
@@ -248,9 +245,9 @@ export function RegistrationView() {
           </Card.Body>
         </Card>
       </Col>
-    // </Row>
   );
 }
 
-// RegistrationView.propTypes = {
-// };
+RegistrationView.propTypes = {
+  onLoggedIn: PropTypes.func.isRequired,
+};

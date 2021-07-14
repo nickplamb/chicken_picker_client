@@ -1,6 +1,6 @@
 import React from 'react'
 
-export function ColoredLine({ color = 'black', height = 1 }) {
+export default function ColoredLine({ color = 'black', height = 1 }) {
   
   return (
     <hr style={{ 

@@ -1,28 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Col } from 'react-bootstrap';
-import { indexOf, split, truncate } from 'lodash'
+import { split } from 'lodash'
+import { Link } from 'react-router-dom';
 
 // Styling
 import './breed-view.scss';
-import { Link } from 'react-router-dom';
 
-const Frankie =  require('url:../../../assets/frankie2.jpeg');
+import { breedImages } from '../breed-images'
 
-export class BreedView extends React.Component {
+import Frankie from 'url:../../../assets/frankie2.jpeg';
 
-
+export default class BreedView extends React.Component {
+  
   render() {
     // a single breed is sent from main-view
     const { breed, onBackClick } = this.props;
-
+    
     const purposeArray = split(breed.purpose, ', ');
     const isDualPurpose =  (purposeArray) => {
       return (purposeArray.indexOf('meat') > -1 && purposeArray.indexOf('eggs') > -1 );
     }
-
-
+    
     const breedsPurpose = isDualPurpose(purposeArray) ? ["Dual-purpose"] : purposeArray;
+
+    const breedNameConverted = breed.breed.replace(/\s+/g, '').toLowerCase();
+    const breedImage = breedImages[breedNameConverted] ? breedImages[breedNameConverted] : Frankie;
 
     return (
       <Col md={8}>
@@ -33,7 +36,7 @@ export class BreedView extends React.Component {
             </h1>
           </Card.Header>
           <Card.Body>
-            <Card.Img variant="top" src={Frankie} alt="a photo of a chicken"/>
+            <Card.Img variant="top" src={ breedImage } alt="a photo of a chicken"/>
             <Card.Text as="div" className="mt-2">
               <p>
                 <span className="label">APA Class: </span>
