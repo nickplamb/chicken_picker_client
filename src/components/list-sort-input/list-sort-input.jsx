@@ -15,8 +15,7 @@ function SortOrderInput({ setSortOrder, sortOrder }) {
     id="sort-order-dropdown"
     title="Sort"
     onSelect={ handleSelect }
-    alignRight="true"
-    block
+    alignRight={ true }
   >
     <Dropdown.Item eventKey="nameUp">Name A - Z</Dropdown.Item>
     <Dropdown.Item eventKey="nameDown">Name Z - A</Dropdown.Item>
