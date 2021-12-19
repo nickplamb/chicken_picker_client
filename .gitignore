@@ -12,4 +12,7 @@ node_modules/
 .vscode/
 
 dist/
-package-lock.json
+
+
+# Local Netlify folder
+.netlify
