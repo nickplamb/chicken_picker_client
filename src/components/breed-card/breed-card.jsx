@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 
 import FavoritesToggle from '../favorites-toggle/favorites-toggle';
-import Frankie from 'url:../../../assets/breed_photos/frankie2.jpeg';
+import missing_image from 'url:../../../assets/missing_image.jpg';
 import { breedImages } from '../breed-images'
 
 // Styling
@@ -13,7 +13,7 @@ import './breed-card.scss';
 
 export default function BreedCard({ breed }) {
   const breedNameConverted = breed.breed.replace(/\s+/g, '').toLowerCase();
-  const breedImage = breedImages[breedNameConverted] ? breedImages[breedNameConverted] : Frankie;
+  const breedImage = breedImages[breedNameConverted] ? breedImages[breedNameConverted] : missing_image;
   
   return (
     <Card>

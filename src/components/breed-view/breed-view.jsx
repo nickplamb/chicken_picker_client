@@ -9,7 +9,7 @@ import './breed-view.scss';
 
 import { breedImages } from '../breed-images'
 
-import Frankie from 'url:../../../assets/frankie2.jpeg';
+import missing_image from 'url:../../../assets/missing_image.jpg';
 
 export default class BreedView extends React.Component {
   
@@ -25,7 +25,7 @@ export default class BreedView extends React.Component {
     const breedsPurpose = isDualPurpose(purposeArray) ? ["Dual-purpose"] : purposeArray;
 
     const breedNameConverted = breed.breed.replace(/\s+/g, '').toLowerCase();
-    const breedImage = breedImages[breedNameConverted] ? breedImages[breedNameConverted] : Frankie;
+    const breedImage = breedImages[breedNameConverted] ? breedImages[breedNameConverted] : missing_image;
 
     return (
       <Col md={8}>
