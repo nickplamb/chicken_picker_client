@@ -60,7 +60,7 @@ function ProfileView({ onLoggedOut, onBackClick, user, userToken, userFavorites 
   });
 
   //Login validation
-  reduceFormValues = formElements => {
+  const reduceFormValues = formElements => {
     const arrElements = Array.prototype.slice.call(formElements); 
     const formValues = arrElements
       .filter(elem => elem.name.length > 0) // filter out non-input elements.
@@ -99,13 +99,13 @@ function ProfileView({ onLoggedOut, onBackClick, user, userToken, userFavorites 
       return formValues;
   }
 
-  checkAllFieldsValid = formValues => {
+  const checkAllFieldsValid = formValues => {
     return !Object.keys(formValues) // highest nested keys, ie. email, username etc.
     .map(x => formValues[x])
     .some(field => !field.valid); // check the .valid property for each reduced element. match any non valid
   };
 
-  onSubmit = e => {
+  const onSubmit = e => {
     e.preventDefault();
     const form = e.target;
     const formValues = reduceFormValues(form.elements);
@@ -187,7 +187,7 @@ function ProfileView({ onLoggedOut, onBackClick, user, userToken, userFavorites 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  onDeregister =() => {
+  const onDeregister =() => {
     handleCloseModal();
 
     axios.delete(`${baseURL}/users`, {

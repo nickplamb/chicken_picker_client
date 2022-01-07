@@ -71,13 +71,13 @@ export default function LoginView({ onLoggedIn }) {
       return formValues;
   }
 
-  checkAllFieldsValid = (formValues) => {
+  const checkAllFieldsValid = (formValues) => {
     return !Object.keys(formValues)
     .map(x => formValues[x])
     .some(field => !field.valid); // check the .valid property for each reduced element.
   };
 
-  onSubmit = e => {
+  const onSubmit = e => {
     e.preventDefault();
     const form = e.target;
     const formValues = reduceFormValues(form.elements);

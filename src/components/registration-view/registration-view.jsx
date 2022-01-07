@@ -57,7 +57,7 @@ export default function RegistrationView({ onLoggedIn }) {
   const [status409Returned, setStatus409Returned] = useState({errorWasReturned: false, msg: ''})
 
   //Login validation
-  reduceFormValues = formElements => {
+  const reduceFormValues = formElements => {
     const arrElements = Array.prototype.slice.call(formElements); 
     const formValues = arrElements
       .filter(elem => elem.name.length > 0) // filter out non-input elements.
@@ -96,13 +96,13 @@ export default function RegistrationView({ onLoggedIn }) {
       return formValues;
   }
 
-  checkAllFieldsValid = (formValues) => {
+  const checkAllFieldsValid = (formValues) => {
     return !Object.keys(formValues) // highest nested keys, ie. email, username etc.
     .map(x => formValues[x])
     .some(field => !field.valid); // check the .valid property for each reduced element. match any non valid
   };
 
-  onSubmit = e => {
+  const onSubmit = e => {
     e.preventDefault();
     const form = e.target;
     const formValues = reduceFormValues(form.elements);
