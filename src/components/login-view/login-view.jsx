@@ -39,7 +39,7 @@ export default function LoginView({ onLoggedIn }) {
   const [status400Returned, setStatus400Returned] = useState(false)
 
   //Login validation
-  reduceFormValues = formElements => {
+   const reduceFormValues = formElements => {
     const arrElements = Array.prototype.slice.call(formElements); 
     const formValues = arrElements
       .filter(elem => elem.name.length > 0) // filter out non-input elements.
