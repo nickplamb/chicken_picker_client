@@ -16,7 +16,7 @@ export default function ChickenNavbar({ logout }){
               {/* <Nav.Link href="#">Logout</Nav.Link> */}
               <NavDropdown title="Profile" id="collapsible-nav-dropdown">
                 <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
-                <NavDropdown.Item href="#">Favorites</NavDropdown.Item>
+                {/* <NavDropdown.Item href="#">Favorites</NavDropdown.Item> */}
                 <NavDropdown.Item href="#" onClick={()=>logout()}>Logout</NavDropdown.Item>
               </NavDropdown>
             </Nav>
