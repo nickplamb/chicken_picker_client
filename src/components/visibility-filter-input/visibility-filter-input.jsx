@@ -9,7 +9,7 @@ function VisibilityFilterInput({ setFilter, visibilityFilter }) {
   return <Form.Control 
     onChange={ e=> setFilter(e.target.value) }
     value={ visibilityFilter }
-    placeholder="Filter"
+    placeholder="Search"
   />;
 }
 

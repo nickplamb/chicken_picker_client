@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Col } from 'react-bootstrap';
-import { split } from 'lodash'
+import { split } from 'lodash';
 import { Link } from 'react-router-dom';
 
 // Styling
 import './breed-view.scss';
 
-import { breedImages } from '../breed-images'
+import { breedImages } from '../breed-images';
 
 import missing_image from 'url:../../../assets/missing_image.jpg';
 
@@ -22,7 +22,7 @@ export default class BreedView extends React.Component {
       return (purposeArray.indexOf('meat') > -1 && purposeArray.indexOf('eggs') > -1 );
     }
     
-    const breedsPurpose = isDualPurpose(purposeArray) ? ["Dual-purpose"] : purposeArray;
+    const breedsPurpose = isDualPurpose(purposeArray) ? [...purposeArray, "Dual-purpose"] : purposeArray;
 
     const breedNameConverted = breed.breed.replace(/\s+/g, '').toLowerCase();
     const breedImage = breedImages[breedNameConverted] ? breedImages[breedNameConverted] : missing_image;
@@ -50,8 +50,10 @@ export default class BreedView extends React.Component {
                   const correctedPurpose = (purpose === 'show' ? 'exhibition' : purpose)
                   return (
                     <Link to={`/purpose/${correctedPurpose}`} key={correctedPurpose}>
-                      <span className="value">{purpose}</span>
-                      {index < array.length && array.length > 1 ? ", ": ""}
+                      <span className="value">
+                        {purpose}
+                        {index < array.length - 1 && array.length > 1 ? ", ": ""}
+                      </span>
                     </Link>
                   )
                 })}
