@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import { Col, Nav, Navbar, NavDropdown, Row } from 'react-bootstrap';
 
-export default function ChickenNavbar({ logout }){
+import { userLogout } from '../../actions/actions';
+
+export default function ChickenNavbar({ logout, user }){
   return (
     <Row>
       <Col>
@@ -13,12 +16,15 @@ export default function ChickenNavbar({ logout }){
           <Navbar.Collapse id="navbar-nav">
             <Nav className="ml-auto">
               <Nav.Link href="/" >Home</Nav.Link>
-              {/* <Nav.Link href="#">Logout</Nav.Link> */}
-              <NavDropdown title="Profile" id="collapsible-nav-dropdown">
-                <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
-                <NavDropdown.Item href="#">Favorites</NavDropdown.Item>
-                <NavDropdown.Item href="#" onClick={()=>logout()}>Logout</NavDropdown.Item>
-              </NavDropdown>
+              {
+                Object.keys(user).length !== 0
+                ? <Nav.Link href="/profile">Profile</Nav.Link>
+                : <Nav.Link href="/login">Login</Nav.Link>
+              }
+              {
+                Object.keys(user).length !== 0 &&
+                <Nav.Link href="#" onClick={()=>logout()}>Logout</Nav.Link>
+              }
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -26,6 +32,14 @@ export default function ChickenNavbar({ logout }){
     </Row>
   )
 }
+
+const mapStateToProps = state => {
+  return { 
+    user: state.user,
+  }
+}
+
+export default connect(mapStateToProps)(ChickenNavbar);
 
 ChickenNavbar.propTypes = {
   logout: PropTypes.func.isRequired,
