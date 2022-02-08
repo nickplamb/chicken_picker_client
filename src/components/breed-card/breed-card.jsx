@@ -53,10 +53,12 @@ export default function BreedCard({ breed }) {
             </Link>
           </p>
         </Card.Text>
-        <Link to={`/breeds/${breed.breed}`}>
-          <Button >Open</Button> {/* variant="link" */}
-        </Link>
-        <FavoritesToggle breed={breed} />
+        <div className='breed-card__actions'>
+          <Link to={`/breeds/${breed.breed}`}>
+            <Button >Open</Button> {/* variant="link" */}
+          </Link>
+          <FavoritesToggle breed={breed} />
+        </div>
       </Card.Body>
     </Card>
   )
